@@ -43,3 +43,15 @@ The VivaLNK, for data extraction, requires a blue-tooth device for extraction. T
 13. Place this in the shared Box folder called RAW_PATIENTS. 
 14. Update the excel file 'patient_log.csv' and include the patient ID, and time stamps collected above.
 15. Charge the VivaLNK and phone until next use.
+
+# Miscellaneous
+
+## Contact Information
+
+If there are any questions, please address them to:
+
+Anish Shah, MD
+asshah4@emory.edu
+469-835-7606
+
+Project Team: Anish Shah, Amit Shah, Alvaro Alonso, Marc Thames, Viola Vaccarino, Arshed Quyyumi
