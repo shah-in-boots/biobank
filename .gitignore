@@ -15,6 +15,9 @@
 *$*.docx
 
 # Ignore large files, let Box sync handle them for now
-*.txt # this should end up being the sample/raw files from VivaLNK
-*.fig # Files from the MATLAB 
-*.mat # Larger MATALB files as well, likely the processed HRV data
+# Files from the MATLAB 
+# .txt = this should end up being the sample/raw files from VivaLNK
+# Larger MATALB files as well, likely the processed HRV data
+*.txt 
+*.fig 
+*.mat 
