@@ -50,8 +50,8 @@ The VivaLNK, for data extraction, requires a blue-tooth device for extraction. T
 
 If there are any questions, please address them to:
 
-Anish Shah, MD
-asshah4@emory.edu
-469-835-7606
+Anish Shah, MD  
+asshah4@emory.edu  
+469-835-7606  
 
 Project Team: Anish Shah, Amit Shah, Alvaro Alonso, Marc Thames, Viola Vaccarino, Arshed Quyyumi
