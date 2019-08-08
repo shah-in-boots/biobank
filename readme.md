@@ -16,7 +16,7 @@ This serves as a description of the necessary steps that any Biobank staff membe
 
 ## Overview of SOP
 
-The general steps are straightforward. The patch is attached to patient at left mid-axillary line at the level of the heart. The blue-tooth enabled phone syncs to the VivaLNK, and sample collection begins. At end of study, the phone application is use to stop sample collection. The data is extracted from teh device, and stored. The phone and VivaLNK are stored.
+The general steps are straightforward. The patch is attached to patient at left mid-axillary line at the level of the heart. The blue-tooth enabled phone syncs to the VivaLNK, and sample collection begins. At end of study, the phone application is use to stop sample collection. The data is extracted from the device, and stored. The phone and VivaLNK are stored.
 
 ## VivaLNK Device Care
 
@@ -26,23 +26,30 @@ The charger is a white USB powered device. It will glow _white_ when it is charg
 
 The VivaLNK, for data extraction, requires a blue-tooth device for extraction. There is developer app on both Android and iPhone devices to allow connection to the device. The phone and phone charger should be kept with the VivaLNK when not in use. 
 
-## Detailed WorkFlow
+## Attaching the ECG Patch
 
 1. Charge VivaLNK patch with included charger.
-2. Charge phone and enable bluetooth for connectivity with the patch.
-3. Consent patient, preferably as close to 7 AM as possible (whether that be in the morning or the night before, per Biobank protocol).
-4. Using 3-step adhesive, place VivaLNK patch on patient at left mid-axillary line at the level of the heart (usually 4-7 inches below "armpit").
-5. Enable Android/iPhone application "VivaLNK" and sync to device. 
-6. Enter patient name or ID number through __Set Info__ button. 
-7. __SetClock__ will reset the timer to ensure synchrony. Write down the time the sampling starts (YYYY:MM:DD H:M:S). This will help with file processing.
-8. Press __Start Sampling__ to enable data collection to begin. Visualize/check to ensure proper lead placement in the __Graphics__ button (choose RTS option for real-time data).
-9. Allow patient to return to scheduled activities. The phone does not need to be near the patient, as the device stores information on its own (up to 24 hours). 
-10. At end of study, preferably after catherization, approach patient and use device to __Stop Sampling__. _Collect the start and end time of catherization. If a stent was placed, please attempt to find what time._
-11. Remove device from patient. Clean device and throw away adhesives.
-12. Plug in phone to save/download the data file. It is located under 'VivaLNK/vSDK/c000/data.txt'. That text file is the data to be extracted.
-13. Place this in the shared Box folder called RAW_PATIENTS. 
-14. Update the excel file 'patient_log.csv' and include the patient ID, and time stamps collected above.
-15. Charge the VivaLNK and phone until next use.
+1. Charge phone and enable bluetooth for connectivity with the patch.
+1. Consent patient, preferably as close to 7 AM as possible (whether that be in the morning or the night before, per Biobank protocol).
+1. Using 3-step adhesive, place VivaLNK patch on patient at left mid-axillary line at the level of the heart (usually 4-7 inches below "armpit").
+1. Enable Android/iPhone application "VivaLNK" and connect to device. 
+1. Enter or ID number through __Set Info__ button. 
+1. __SetClock__ will reset the timer to ensure synchrony. Write down the time the sampling starts (HH:MM). This will help with file processing.
+1. Press __Start Sampling__ to enable data collection to begin. Visualize/check to ensure proper lead placement in the __Graphics__ button (choose RTS option for real-time data).
+1. Allow patient to return to scheduled activities. The phone does not need to be near the patient, as the device stores information on its own (up to 24 hours). 
+1. At end of study, after catherization, approach patient and use device to __Stop Sampling__. If they are outpatient, ideally a few hours of post-cath data would be helpful. If they are inpatient, device can be kept overnight.
+1. Remove device from patient. Clean device and throw away adhesives.
+1. Charge the VivaLNK and phone until next use.
+
+## Extracting the ECG Data
+
+1. The extraction process is slow, and will require the phone to sync to the VivaLNK patch. Once back in the room, reconnect phone to patch using VivaLNK SDK application. The patch itself has an ID number, which will be seen on the device menu. Make sure it matches when there are multiple devices.
+1. The patch will upload data onto the phone for the next several hours. The files should be 2.5 MB for every hour of recording (e.g. 20 hours is ~55 MB). Make sure the phone remains plugged in, and the bluetooth stays connected. The patch can be placed for charging.
+1. The file is located on the device under the folder 'VivaLNK/vSDK/c[device #]/data.txt'. 
+1. Upload this text file, after verifying its size, to the "biobank" box folder under named _raw_patients_. 
+1. Update the excel file 'patient_log.csv' and include the GENE ID number, the date of collection, and the appropriate time stamps.
+1. The time stamps include when patch was activated/turned-on, time of LHC, time of stent deployment, time of balloon angioplasty. If there are other concerns, you may note them here.
+1. After the file has been uploaded, go to the phone and delete the text file (to not mix with the next patient's recording). Clear the flash data on the patch through the app interface.
 
 # Miscellaneous
 
