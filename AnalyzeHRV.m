@@ -19,11 +19,11 @@ numsub = length(patients);
 
 % Loop, timed with tic toc
 tic
-for i = 1:numsub
+parfor i = 1:numsub
   % Make a folder
   name = patients{i};
   mkdir(folder, name);
-  
+
   % VivaLNK parser to run and make .mat files for ECG and ACC data
   % Move this into output folder
   VivaLNK_parser_beta(folder, patients{1});
@@ -37,14 +37,14 @@ for i = 1:numsub
   HRVparams.DFA.on = 0; % No DFA analysis for this demo
   HRVparams.HRT.on = 0; % No HRT analysis for this demo
   HRVparams.output.separate = 1; % Write out results per patient
-  
+
   % Extract ECG signal
   raw_ecg = load([folder filesep name filesep name '_ecg.mat'], 'ecg');
   ecg = raw_ecg.ecg;
   t = load([folder filesep name filesep name '_ecg.mat'], 't');
-  
+
   % Graph ECG signal into MATLAB file for visualization of errors/quality
-  
+
   % Create time vector for visualizing data
   Fs = HRVparams.Fs;
   tm = 0:1/Fs:(length(ecg)-1)/Fs;
@@ -53,7 +53,7 @@ for i = 1:numsub
   plot(tm,ecg);
   xlabel('[s]');
   ylabel('[mV]');
-  
+
   % call the function that perform peak detection
   % added a multiplier of a 1000 to get a detection of value
   r_peaks = jqrs(ecg,HRVparams);
@@ -70,6 +70,6 @@ for i = 1:numsub
   % Run the HRV analysis
   [results, resFilenameHRV] = ...
       Main_HRV_Analysis(ecg, [], 'ECGWaveform', HRVparams, name);
-  
+
 end
 toc
