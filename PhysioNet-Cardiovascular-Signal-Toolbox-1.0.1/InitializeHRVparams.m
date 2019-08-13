@@ -54,7 +54,7 @@ function HRVparams = InitializeHRVparams(project_name)
 %       more information
 %
 % Changes made to accept VivaLNK data
-% Project is sampld at 128 Hz
+% Project is sampled at 128 Hz
 %
 % Edited by Anish Shah, 07/31/19
 % contact: mrshahman@gmail.com
@@ -70,8 +70,8 @@ switch project_name
     % Define new project name and parameters
     case project_name                      % Update with your project name
         HRVparams.Fs = 128;                % Specify sampling frequency
-        HRVparams.readdata = ['raw_patients' filesep project_name]; % (Optional) Specify name for data input folder
-        HRVparams.writedata = ['raw_patients' filesep project_name];% (Optional) Specify name for data output folder
+        HRVparams.readdata = ['proc_patients' filesep project_name]; % (Optional) Specify name for data input folder
+        HRVparams.writedata = ['proc_patients' filesep project_name];% (Optional) Specify name for data output folder
         HRVparams.datatype = '';           % (Optional) Specify Data type of input
         HRVparams.ext = '';                % (Optional) Specify file extension of input (e.g., 'mat','qrs')
 

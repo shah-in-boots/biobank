@@ -34,7 +34,7 @@ function VivaLNK_parser_beta(dataDir, fileName)
 % Input file has to be '.txt' format
 fid = fopen([dataDir filesep fileName '.txt'],'r');
 
-ecg_gain = 1000;
+ecg_gain = 0.0005;
 fs_ecg = 128;
 ts_ecg = 1000/fs_ecg;
 fs_acc = 5;

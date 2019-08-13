@@ -13,6 +13,7 @@
 
 # Ignore partial files
 *$*.docx
+*.swp
 
 # Ignore large files, let Box sync handle them for now
 # Files from the MATLAB 
