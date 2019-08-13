@@ -2,7 +2,7 @@
 
 ## Description of contents
 
-This folder contains only raw, unprocessed data from VivaLNK ECG patch. The file sizes after extraction of data will be too large to maintain.
+This folder contains only raw, unprocessed data from VivaLNK ECG patch. The file sizes after extraction of data will be too large to maintain. Rsync or an alternative method will be used to sync large files into the raw patient folder.
 
 ## Patient log
 
