@@ -1,4 +1,4 @@
-function windowRRintervals = CreateWindowRRintervals(tNN, NN, HRVparams,option)
+function windowRRintervals = CreateWindowRRintervals(tNN, NN, HRVparams, option)
 %
 % windowRRintervals = CreateWindowRRintervals(NN, tNN, settings, options)
 %   

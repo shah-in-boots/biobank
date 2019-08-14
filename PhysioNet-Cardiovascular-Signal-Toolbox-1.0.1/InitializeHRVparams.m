@@ -257,13 +257,13 @@ HRVparams.prsa.min_anch = 20;      % Default: 20, minimum number of anchors poin
 
 % The following settings are for jqrs.m
 
-HRVparams.PeakDetect.REF_PERIOD = 0.250;   % Default: 0.25 (should be 0.15 for FECG), refractory period in sec between two R-peaks
+HRVparams.PeakDetect.REF_PERIOD = 0.250;   % Default: 0.25 (should be 0.15 for fetal ECG (fECG)), refractory period in sec between two R-peaks
 HRVparams.PeakDetect.THRES = .5;           % Default: 0.6, Energy threshold of the detector
 HRVparams.PeakDetect.fid_vec = [];         % Default: [], If some subsegments should not be used for finding the optimal
                                            % threshold of the P&T then input the indices of the corresponding points here
 HRVparams.PeakDetect.SIGN_FORCE = [];      % Default: [], Force sign of peaks (positive value/negative value)
 HRVparams.PeakDetect.debug = 0;            % Default: 0
-HRVparams.PeakDetect.ecgType = 'MECG';     % Default : MECG, options (adult MECG) or featl ECG (fECG)
+HRVparams.PeakDetect.ecgType = 'MECG';     % Default : MECG, options (adult MECG) or fECG
 HRVparams.PeakDetect.windows = 15;         % Befautl: 15,(in seconds) size of the window onto which to perform QRS detection
 
 
