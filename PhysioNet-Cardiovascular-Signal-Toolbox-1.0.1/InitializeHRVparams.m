@@ -143,7 +143,7 @@ HRVparams.data_confidence_level = 1;
 %% 3. Global Settings (Window Size)
 
 HRVparams.windowlength = 300;	      % Default: 300, seconds
-HRVparams.increment = 30;             % Default: 30, seconds increment
+HRVparams.increment = 5;             % Default: 30, seconds increment
 HRVparams.numsegs = 5;                % Default: 5, number of segments to collect with lowest HR
 HRVparams.RejectionThreshold = .20;   % Default: 0.2, amount (%) of data that can be rejected before a
                                       % window is considered too low quality for analysis
@@ -258,7 +258,7 @@ HRVparams.prsa.min_anch = 20;      % Default: 20, minimum number of anchors poin
 % The following settings are for jqrs.m
 
 HRVparams.PeakDetect.REF_PERIOD = 0.250;   % Default: 0.25 (should be 0.15 for FECG), refractory period in sec between two R-peaks
-HRVparams.PeakDetect.THRES = .6;           % Default: 0.6, Energy threshold of the detector
+HRVparams.PeakDetect.THRES = .5;           % Default: 0.6, Energy threshold of the detector
 HRVparams.PeakDetect.fid_vec = [];         % Default: [], If some subsegments should not be used for finding the optimal
                                            % threshold of the P&T then input the indices of the corresponding points here
 HRVparams.PeakDetect.SIGN_FORCE = [];      % Default: [], Force sign of peaks (positive value/negative value)
