@@ -6,7 +6,7 @@ datatype,
 ext,
 data confidence level,1
 windowlength,300
-increment,30
+increment,5
 numsegs,5
 RejectionThreshold,0.2
 MissingDataThreshold,0.15
@@ -60,7 +60,7 @@ prsa plot results,0
 prsa scale,2
 prsa min anch,20
 PeakDetect REF PERIOD,0.25
-PeakDetect THRES,0.6
+PeakDetect THRES,0.5
 PeakDetect fid vec,[]
 PeakDetect SIGN FORCE,[]
 PeakDetect debug,0
