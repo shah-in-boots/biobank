@@ -26,7 +26,7 @@ numsub = length(patients);
 
 % Loop, timed with tic toc
 tic
-parfor i = 1:numsub
+for i = 1:numsub
   % Make a folder
   name = patients{i};
   mkdir(proc_folder, name);
