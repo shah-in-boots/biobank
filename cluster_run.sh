@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Ensure in same directory as running file
-#$ -cwd
+#$ -cwd -V
 
 # Matlab script
 matlab -nodisplay -r "AnalyzeHRV"

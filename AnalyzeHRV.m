@@ -2,7 +2,7 @@
 % Summary function for analylzing HRV data en masse
 % Uses HRV toolbox heavily
 
-%% Set up files
+%% Set up environment
 
 % Clear workspace
 clear; clc; close all;
@@ -22,11 +22,11 @@ files = dir(fullfile(raw_folder, '*.txt'));
 patients = regexprep({files.name}, '.txt', '');
 numsub = length(patients);
 
+%% Parallel for loop for analysis
 
-%% Loop for analysis
 % Loop, timed with tic toc
 tic
-parfor i = 1:numsub
+for i = 1:numsub
   % Make a folder
   name = patients{i};
   mkdir(proc_folder, name);
