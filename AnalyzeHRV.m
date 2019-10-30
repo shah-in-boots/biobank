@@ -2,6 +2,8 @@
 % Summary function for analylzing HRV data en masse
 % Uses HRV toolbox heavily
 
+%% Set up files
+
 % Clear workspace
 clear; clc; close all;
 
@@ -10,16 +12,18 @@ clear; clc; close all;
 addpath(genpath(pwd));
 
 % Folder holding data
-raw_folder = [pwd filesep 'raw_patients'];
+raw_folder = [pwd filesep 'raw_data'];
 
 % Target folder for patient data
-proc_folder = [pwd filesep 'proc_patients'];
+proc_folder = [pwd filesep 'proc_data'];
 
 % Identify all VivaLNK files
 files = dir(fullfile(raw_folder, '*.txt'));
 patients = regexprep({files.name}, '.txt', '');
 numsub = length(patients);
 
+
+%% Loop for analysis
 % Loop, timed with tic toc
 tic
 parfor i = 1:numsub
