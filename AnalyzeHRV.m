@@ -53,26 +53,26 @@ for i = 1:numsub
   % Graph ECG signal into MATLAB file for visualization of errors/quality
 
   % Create time vector for visualizing data
-  Fs = HRVparams.Fs;
-  tm = 0:1/Fs:(length(ecg)-1)/Fs;
+  %Fs = HRVparams.Fs;
+  %tm = 0:1/Fs:(length(ecg)-1)/Fs;
   % plot the signal
-  figure(1);
-  plot(tm,ecg);
-  xlabel('[s]');
-  ylabel('[mV]');
+  %figure(1);
+  %plot(tm,ecg);
+  %xlabel('[s]');
+  %ylabel('[mV]');
 
   % call the function that perform peak detection
   % added a multiplier of a 1000 to get a detection of value
-  r_peaks = jqrs(ecg,HRVparams);
+  %r_peaks = jqrs(ecg,HRVparams);
 
   % plot the detected r_peaks on the top of the ecg signal
-  figure(1);
-  hold on;
-  plot(r_peaks./Fs, ecg(r_peaks),'o');
-  legend('ecg signal', 'detected R peaks');
+  %figure(1);
+  %hold on;
+  %plot(r_peaks./Fs, ecg(r_peaks),'o');
+  %legend('ecg signal', 'detected R peaks');
 
   % Save file
-  saveas(figure(1), [proc_folder filesep name filesep name '.fig']);
+  %saveas(figure(1), [proc_folder filesep name filesep name '.fig']);
 
   % Run the HRV analysis
   [results, resFilenameHRV] = ...
