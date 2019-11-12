@@ -27,6 +27,9 @@ numsub = length(patients);
 % Loop, timed with tic toc
 tic
 for i = 1:numsub
+  % Time it
+  tic
+
   % Make a folder
   name = patients{i};
   mkdir(proc_folder, name);
@@ -77,6 +80,8 @@ for i = 1:numsub
   % Run the HRV analysis
   [results, resFilenameHRV] = ...
       Main_HRV_Analysis(ecg, [], 'ECGWaveform', HRVparams, name);
-
+  
+  % STop time
+  toc
 end
 toc
