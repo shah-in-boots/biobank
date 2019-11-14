@@ -18,4 +18,10 @@ packrat/src/
 
 # Ignore large data files
 *.txt
-
+*.tex
+*.mat
+*.wqrs
+*.sqijw
+*.sqijs
+*.jqrs
+*.hea
