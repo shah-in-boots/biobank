@@ -11,9 +11,9 @@ knitr::opts_chunk$set(
   cache = TRUE,
   eval = TRUE,
   include = TRUE,
-  echo = TRUE,
+  echo = FALSE,
   message = FALSE,
-  results = 'markup',
+  warning = FALSE,
   options("scipen" = 999, "digits = 2")
 )
 
@@ -65,6 +65,8 @@ df$sad <- ifelse(df$phq >9, 1, 0)
 
 # Safe the table
 df_sad <- df[c('uniqueid', 'phq', 'sad')]
+
+describe(df_sad$phq)
 ```
 
 ## Sex and age categories
@@ -86,6 +88,8 @@ df$sexy[df$ageBin == 2 & df$gend == 1] <- "Old Men"
 
 # Save demo
 df_demo <- df[c('uniqueid', 'age', 'gend', 'ageBin', 'sexy')]
+
+describe(df_demo)
 ```
 
 ## Coronary artery disease
@@ -115,6 +119,8 @@ df$ihd[df$ang1results == 1] <- 1
 
 # Final df
 df_cad <- df
+
+describe(df_cad)
 ```
 
 ## Mortality and outcomes
@@ -139,6 +145,8 @@ df$status[df$status > 0] <- 1
 
 # Save
 df_status <- df
+
+describe(df_status)
 ```
 
 
@@ -160,11 +168,14 @@ df$sexy %<>% factor()
 cmp <- compareGroups(ihd ~ sexy + phq, data = df)
 cmpTable <- createTable(cmp)
 
-
 # Predict CAD
 mCad <- glm(ihd ~ phq*sexy, data = df, family = binomial)
 mDead <- glm(status ~ phq*sexy*ihd, data = df, family = binomial)
 
+# Output
+cmpTable
+stargazer(mCad)
+stargazer(mDead)
 ```
 
 

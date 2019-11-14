@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-## Read in data {{{ ----------------------------------------
+## Read in data {{{ ====
 
 # Read in demographic data
 df_num <- read_csv('biobank_data_numerical.csv', col_names = TRUE)
@@ -10,12 +10,9 @@ df_txt <- read_csv('biobank_data_text.csv', col_names = TRUE)
 numVar <- names(df_num)
 txtVar <- names(df_txt)
 
-# Rename text file for ease of manipulation
-names(df_txt) <- names(df_num)
-
 # }}}
 
-## Demographic variables {{{ -------------------------------
+## Demographic variables {{{ ====
 
 svar <- c(
 'uniqueid',
@@ -40,7 +37,7 @@ svar <- c(
 'behq8',
 'behq2',
 'behq6',
-'behq14'
+'behq14',
 'behq10'
 )
 
