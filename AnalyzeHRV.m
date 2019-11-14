@@ -40,7 +40,8 @@ parfor i = 1:numsub
   VivaLNK_parser_beta(raw_folder, patients{i});
   movefile([raw_folder filesep name '*.mat'], [proc_folder filesep name]);
   toc
-  fprintf('Vivalnk processing completed for %s.\n', name)
+  x = sprintf('Vivalnk processing completed for %s.\n', name);
+  disp(x)
 
   % Initialize HRV parameters
   HRVparams = InitializeHRVparams(name);
@@ -86,9 +87,11 @@ parfor i = 1:numsub
   
   % STop time
   toc
-  fprintf('HRV analysis done for %s.\n', name)
+  x = sprintf('HRV analysis done for %s.\n', name);
+  disp(x)
 
 end
-fprintf('Total Run Time...')
+x = sprintf('Total Run Time...');
+disp(x)
 toc
 
