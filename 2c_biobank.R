@@ -4,11 +4,13 @@
 
 # Read in demographic data
 df_num <- read_csv('biobank_data_numerical.csv', col_names = TRUE)
-df_txt <- read_csv('biobank_data_labels', col_names = TRUE)
+df_txt <- read_csv('biobank_data_labels.csv', col_names = TRUE)
 
 # Save the labels to match later
 numVar <- names(df_num)
 txtVar <- names(df_txt)
+
+names(df_txt) <- names(df_num)
 
 # }}}
 
@@ -51,8 +53,7 @@ demo <- df_num[svar]
 
 ## Psychological and behavioral variables {{{ ====
 
-svar <- c(
-'uniqueid',
+phq9 <- c(
 'mdplea',
 'mddep',
 'mdsleep',
@@ -61,11 +62,10 @@ svar <- c(
 'mdbad',
 'mdconc',
 'mdspeak',
-'mddead',
-'mdcouns'
+'mddead'
 )
 
-psych <- df_num[svar]
+psych <- df_num[c('uniqueid', phq9)]
 
 #}}}
 
@@ -104,7 +104,7 @@ svar <- c(
 'icd'
 )
 
-clinHx <- df[svar]
+clinHx <- df_num[svar]
 
 # Per chart review
 svar <- c(
@@ -134,7 +134,7 @@ svar <- c(
 'apnea'
 )
 
-chartHx <- df[svar]
+chartHx <- df_num[svar]
 
 # }}}
 
@@ -241,7 +241,7 @@ svar <- c(
 'ang1outcomes'
 )
 
-cath <- df[svar]
+cath <- df_num[svar]
 
 #}}}
 

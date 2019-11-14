@@ -1,8 +1,12 @@
 #!/usr/bin/env Rscript
 
-## Read in HRV {{{
+## Read in files {{{ ====
 
-# Can only be run after matlab
+raw_folder <- file.path(getwd(), 'raw_data')
+proc_folder <- file.path(getwd(), 'proc_data')
+patid <- tools::file_path_sans_ext(list.files(path = proc_folder, pattern = '*.txt'))
+
+# Can only be run after matlab has process HRV
 rawfile <- read_csv(Sys.glob(file.path(folder, "*allwindows*.csv")), col_names = TRUE)
 
 # Pick out relevant columns
