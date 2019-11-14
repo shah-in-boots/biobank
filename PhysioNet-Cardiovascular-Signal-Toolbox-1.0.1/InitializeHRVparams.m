@@ -164,7 +164,7 @@ HRVparams.sqi.margin = 2;                % Default: 2, seconds, Margin time not 
 
 %% 7. Preprocess Settings
 
-HRVparams.preprocess.figures = 1;                   % Figures on = 1, Figures off = 0
+HRVparams.preprocess.figures = 0;                   % Figures on = 1, Figures off = 0
 HRVparams.preprocess.gaplimit = 2;                  % Default: 2, seconds; maximum believable gap in rr intervals
 HRVparams.preprocess.per_limit = 0.2;               % Default: 0.2, Percent limit of change from one interval to the next
 HRVparams.preprocess.forward_gap = 3;	            % Default: 3, Maximum tolerable gap at beginning of timeseries in seconds

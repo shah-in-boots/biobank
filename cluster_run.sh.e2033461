@@ -1,0 +1,12 @@
+{Error using validateHandleToPrint
+No figure to print.
+
+Error in validate (line 17)
+pj = validateHandleToPrint(pj);
+
+Error in print (line 67)
+pj = validate( pj );
+
+Error in AnalyzeHRV (line 29)
+parfor i = 1:numsub
+} 
