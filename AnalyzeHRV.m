@@ -33,15 +33,13 @@ parfor i = 1:numsub
   % Make a folder
   name = patients{i};
   mkdir(proc_folder, name);
-  print
 
   % VivaLNK parser to run and make .mat files for ECG and ACC data
   % Move this into output folder
   VivaLNK_parser_beta(raw_folder, patients{i});
   movefile([raw_folder filesep name '*.mat'], [proc_folder filesep name]);
   toc
-  x = sprintf('Vivalnk processing completed for %s.\n', name);
-  disp(x)
+  fprintf('Vivalnk processing completed for %s.\n', name);
 
   % Initialize HRV parameters
   HRVparams = InitializeHRVparams(name);
@@ -87,11 +85,9 @@ parfor i = 1:numsub
   
   % STop time
   toc
-  x = sprintf('HRV analysis done for %s.\n', name);
-  disp(x)
+  fprintf('HRV analysis done for %s.\n', name);
 
 end
-x = sprintf('Total Run Time...');
-disp(x)
+fprintf('Total Run Time...');
 toc
 

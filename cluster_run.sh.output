@@ -1,0 +1,221 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.556344) 64-bit (glnxa64)
+                               March 27, 2017
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+Starting parallel pool (parpool) using the 'local' profile ...
+[Warning: The system time zone setting, 'US/Eastern', does not specify a single
+time zone unambiguously. It will be treated as 'America/New_York'. See the <a
+href="matlab:doc('datetime.TimeZone')">datetime.TimeZone property</a> for
+details about specifying time zones.] 
+[> In verifyTimeZone (line 23)
+  In datetime (line 515)
+  In parallel.internal.cluster.DefaultProperties.getNewJobPropStruct (line 16)
+  In parallel.internal.cluster.CJSSupport/buildJob (line 158)
+  In parallel.cluster.CJSCluster/buildCommunicatingJob (line 465)
+  In parallel.Cluster/createCommunicatingJob (line 92)
+  In parallel.internal.pool.InteractiveClient>iCreateCommunicatingJob (line 715)
+  In parallel.internal.pool.InteractiveClient/start (line 325)
+  In parallel.Pool>iStartClient (line 593)
+  In parallel.Pool.hBuildPool (line 472)
+  In parallel.internal.pool.doParpool (line 18)
+  In parpool (line 89)
+  In parallel.internal.pool.PoolArrayManager.getOrAutoCreateWithCleanup (line 49)
+  In pctTryCreatePoolIfNecessary (line 23)
+  In distcomp.remoteparfor.tryRemoteParfor
+  In parallel_function (line 433)
+  In AnalyzeHRV (line 29)] 
+connected to 12 workers.
+Elapsed time is 45.367186 seconds.
+Elapsed time is 46.079759 seconds.
+Elapsed time is 60.570387 seconds.
+Elapsed time is 69.864440 seconds.
+Elapsed time is 85.827857 seconds.
+Elapsed time is 97.200176 seconds.
+Elapsed time is 46.486993 seconds.
+Vivalnk processing completed for 07011.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07011/Annotation 
+HRV Analysis completed for subject ID 07011 
+Elapsed time is 117.087404 seconds.
+HRV analysis done for 07011.
+Elapsed time is 45.740974 seconds.
+Vivalnk processing completed for 07005.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07005/Annotation 
+Elapsed time is 61.110098 seconds.
+Vivalnk processing completed for 06988.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06988/Annotation 
+HRV Analysis completed for subject ID 06988 
+HRV Analysis completed for subject ID 07005 
+Elapsed time is 70.439728 seconds.
+Vivalnk processing completed for 06994.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06994/Annotation 
+Elapsed time is 199.855491 seconds.
+Elapsed time is 201.119493 seconds.
+Elapsed time is 86.480457 seconds.
+Vivalnk processing completed for 06928.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06928/Annotation 
+Elapsed time is 168.271841 seconds.
+HRV analysis done for 07005.
+Elapsed time is 43.092614 seconds.
+Elapsed time is 101.404116 seconds.
+Elapsed time is 156.928932 seconds.
+HRV analysis done for 06988.
+Elapsed time is 67.845729 seconds.
+Elapsed time is 97.908920 seconds.
+Vivalnk processing completed for 06977.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06977/Annotation 
+Elapsed time is 43.415295 seconds.
+Vivalnk processing completed for 07004.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07004/Annotation 
+HRV Analysis completed for subject ID 06994 
+HRV Analysis completed for subject ID 07004 
+Elapsed time is 152.077899 seconds.
+HRV analysis done for 07004.
+HRV Analysis completed for subject ID 06928 
+Elapsed time is 68.386062 seconds.
+Vivalnk processing completed for 06984.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06984/Annotation 
+HRV Analysis completed for subject ID 06984 
+Elapsed time is 194.911983 seconds.
+HRV analysis done for 06984.
+HRV Analysis completed for subject ID 06977 
+Elapsed time is 102.234282 seconds.
+Vivalnk processing completed for 07032.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07032/Annotation 
+Elapsed time is 295.349999 seconds.
+HRV analysis done for 06994.
+Elapsed time is 89.009389 seconds.
+Elapsed time is 386.258426 seconds.
+Elapsed time is 389.080119 seconds.
+Elapsed time is 415.051334 seconds.
+Elapsed time is 418.018708 seconds.
+Elapsed time is 370.642732 seconds.
+HRV analysis done for 06977.
+Elapsed time is 61.229224 seconds.
+Elapsed time is 436.672149 seconds.
+Elapsed time is 439.727951 seconds.
+Elapsed time is 443.357093 seconds.
+Elapsed time is 446.735275 seconds.
+Elapsed time is 448.594400 seconds.
+Elapsed time is 451.743596 seconds.
+Vivalnk processing completed for 07014.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07014/Annotation 
+HRV Analysis completed for subject ID 07032 
+Elapsed time is 365.605326 seconds.
+HRV analysis done for 07032.
+Elapsed time is 89.668650 seconds.
+Vivalnk processing completed for 06989.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06989/Annotation 
+Elapsed time is 61.698677 seconds.
+Vivalnk processing completed for 06965.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06965/Annotation 
+HRV Analysis completed for subject ID 06965 
+Elapsed time is 196.307995 seconds.
+HRV analysis done for 06965.
+HRV Analysis completed for subject ID 06989 
+Elapsed time is 283.249755 seconds.
+HRV analysis done for 06989.
+Elapsed time is 138.872442 seconds.
+Elapsed time is 139.897501 seconds.
+Elapsed time is 67.642092 seconds.
+Elapsed time is 332.998357 seconds.
+Elapsed time is 335.658369 seconds.
+Elapsed time is 376.930580 seconds.
+Elapsed time is 379.674674 seconds.
+Elapsed time is 332.053170 seconds.
+HRV analysis done for 06928.
+Elapsed time is 380.709001 seconds.
+Elapsed time is 383.224533 seconds.
+Elapsed time is 68.150523 seconds.
+Vivalnk processing completed for 07053.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07053/Annotation 
+Vivalnk processing completed for 07045.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07045/Annotation 
+HRV Analysis completed for subject ID 07014 
+Elapsed time is 784.125661 seconds.
+HRV analysis done for 07014.
+HRV Analysis completed for subject ID 07053 
+Elapsed time is 209.730930 seconds.
+HRV analysis done for 07053.
+Elapsed time is 96.795199 seconds.
+Vivalnk processing completed for 07027.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07027/Annotation 
+HRV Analysis completed for subject ID 07045 
+Elapsed time is 492.165166 seconds.
+HRV analysis done for 07045.
+Elapsed time is 430.071924 seconds.
+Elapsed time is 433.253621 seconds.
+Vivalnk processing completed for 06983.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06983/Annotation 
+Elapsed time is 97.410172 seconds.
+Vivalnk processing completed for 07063.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07063/Annotation 
+HRV Analysis completed for subject ID 07063 
+Elapsed time is 299.062519 seconds.
+HRV analysis done for 07063.
+Vivalnk processing completed for 07020.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07020/Annotation 
+Elapsed time is 425.108487 seconds.
+Elapsed time is 428.362594 seconds.
+Vivalnk processing completed for 06944.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06944/Annotation 
+Vivalnk processing completed for 06955.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06955/Annotation 
+HRV Analysis completed for subject ID 07027 
+Elapsed time is 1278.986381 seconds.
+HRV analysis done for 07027.
+Vivalnk processing completed for 06925.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06925/Annotation 
+Vivalnk processing completed for 07037.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07037/Annotation 
+HRV Analysis completed for subject ID 07020 
+Elapsed time is 1317.402792 seconds.
+HRV analysis done for 07020.
+HRV Analysis completed for subject ID 06983 
+HRV Analysis completed for subject ID 06944 
+Vivalnk processing completed for 07036.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07036/Annotation 
+HRV Analysis completed for subject ID 07037 
+Elapsed time is 1133.837569 seconds.
+HRV analysis done for 07037.
+Vivalnk processing completed for 07052.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/07052/Annotation 
+HRV Analysis completed for subject ID 07036 
+Elapsed time is 1258.985598 seconds.
+HRV analysis done for 07036.
+Elapsed time is 1436.623237 seconds.
+HRV analysis done for 06944.
+Elapsed time is 172.808868 seconds.
+Elapsed time is 174.025674 seconds.
+HRV Analysis completed for subject ID 06955 
+Elapsed time is 1644.385247 seconds.
+HRV analysis done for 06955.
+Elapsed time is 87.345701 seconds.
+HRV Analysis completed for subject ID 07052 
+Elapsed time is 1207.316720 seconds.
+HRV analysis done for 07052.
+Elapsed time is 1391.103515 seconds.
+HRV analysis done for 06983.
+Elapsed time is 403.781166 seconds.
+Elapsed time is 406.378613 seconds.
+HRV Analysis completed for subject ID 06925 
+Elapsed time is 1473.078126 seconds.
+HRV analysis done for 06925.
+Elapsed time is 88.058727 seconds.
+Vivalnk processing completed for 06954.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06954/Annotation 
+Vivalnk processing completed for UI7616.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/UI7616/Annotation 
+Vivalnk processing completed for 06931.
+Creating a new folder: "Annotation", folder is located in /home/asshah4/projects/biobank//home/asshah4/projects/biobank/proc_data/06931/Annotation 
+HRV Analysis completed for subject ID 06954 
+Elapsed time is 282.438411 seconds.
+HRV analysis done for 06954.
+HRV Analysis completed for subject ID 06931 
+Elapsed time is 491.894185 seconds.
+HRV analysis done for 06931.
