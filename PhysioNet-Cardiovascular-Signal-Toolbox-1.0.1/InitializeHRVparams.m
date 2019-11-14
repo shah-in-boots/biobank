@@ -70,8 +70,8 @@ switch project_name
     % Define new project name and parameters
     case project_name                      % Update with your project name
         HRVparams.Fs = 128;                % Specify sampling frequency
-        HRVparams.readdata = ['proc_patients' filesep project_name]; % (Optional) Specify name for data input folder
-        HRVparams.writedata = ['proc_patients' filesep project_name];% (Optional) Specify name for data output folder
+        HRVparams.readdata = ['proc_data' filesep project_name]; % (Optional) Specify name for data input folder
+        HRVparams.writedata = ['proc_data' filesep project_name];% (Optional) Specify name for data output folder
         HRVparams.datatype = '';           % (Optional) Specify Data type of input
         HRVparams.ext = '';                % (Optional) Specify file extension of input (e.g., 'mat','qrs')
 
@@ -164,7 +164,7 @@ HRVparams.sqi.margin = 2;                % Default: 2, seconds, Margin time not 
 
 %% 7. Preprocess Settings
 
-HRVparams.preprocess.figures = 1;                   % Figures on = 1, Figures off = 0
+HRVparams.preprocess.figures = 0;                   % Figures on = 1, Figures off = 0
 HRVparams.preprocess.gaplimit = 2;                  % Default: 2, seconds; maximum believable gap in rr intervals
 HRVparams.preprocess.per_limit = 0.2;               % Default: 0.2, Percent limit of change from one interval to the next
 HRVparams.preprocess.forward_gap = 3;	            % Default: 3, Maximum tolerable gap at beginning of timeseries in seconds
