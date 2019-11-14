@@ -11,7 +11,7 @@ numVar <- names(df_num)
 txtVar <- names(df_txt)
 
 # Rename text file for ease of manipulation
-names(df_txt) <- names(df_num)
+# names(df_txt) <- names(df_num)
 
 # }}}
 
@@ -19,6 +19,9 @@ names(df_txt) <- names(df_num)
 
 # Selected variables
 svar <- c(
+'uniqueid',
+'geneidadm',
+'mrn',
 'prevmi',
 'mitimes',
 'datemi',
@@ -202,14 +205,18 @@ svar <- c(
 'peaktropdate',
 'laboratory_complete',
 'prevcabg'
+)
 
 cardiacHistory <- df_num[svar]
 
 # }}}
 
-## Angiography data {{{
+## Angiography data {{{ ====
 
 svar <- c(
+'uniqueid',
+'geneidadm',
+'mrn',
 'numangio',
 'angio1date',
 'angio2date',
@@ -311,7 +318,7 @@ svar <- c(
 'ang1graftint12',
 'ang1graftint13',
 'ang1graftint14',
-'ang1outcomes',
+'ang1outcomes'
 )
 
 angiography <- df_num[svar]

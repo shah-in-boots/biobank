@@ -140,6 +140,9 @@ incorrect_data <- function(name) {
 }
 
 # Test this out
-tmp <- incorrect_data("06989")
+#name <- "07063"
+#tmp <- incorrect_data(name)
+#range(tmp$datetime)
+#tmp$datetime
 
 #}}}

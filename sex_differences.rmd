@@ -1,0 +1,170 @@
+---
+title: "Depression and CAD"
+author: "Anish Shah"
+subtitle: Biobank analysis with sex and age
+output: pdf_document
+---
+
+```{r setup and script args, global_options, include=FALSE}
+# Knitr options
+knitr::opts_chunk$set(
+  cache = TRUE,
+  eval = TRUE,
+  include = TRUE,
+  echo = TRUE,
+  message = FALSE,
+  results = 'markup',
+  options("scipen" = 999, "digits = 2")
+)
+
+# Source Libraries
+source("1_libraries.R")
+```
+
+
+```{r}
+# Read in demographic data
+df_num <- read_csv('sex_sad_cad.csv', col_names = TRUE)
+df_txt <- read_csv('sex_sad_cad_labels.csv', col_names = TRUE)
+
+# Save the labels to match later
+numVar <- names(df_num)
+txtVar <- names(df_txt)
+```
+
+# Tidying data
+
+## Depression scores
+
+```{r}
+# Data frame for depression
+df <- subset(df_num, redcap_event_name == "enrollment_1_arm_1")
+
+# Depression
+phq9 <- c(
+  'mdplea',
+  'mddep',
+  'mdsleep',
+  'mdtired',
+  'mdappt',
+  'mdbad', 
+  'mdconc',
+  'mddead',
+  'mdspeak'
+)
+
+# New data frame
+df <- df[c('uniqueid', phq9)]
+
+# SUm the PHq9
+df %<>%
+ mutate(phq = select(., mdplea:mdspeak) %>% rowSums(na.rm = TRUE)) 
+
+# CUt off of 10 for hte PHQ9
+df$sad <- ifelse(df$phq >9, 1, 0)
+
+# Safe the table
+df_sad <- df[c('uniqueid', 'phq', 'sad')]
+```
+
+## Sex and age categories
+
+```{r}
+# Data frame for sex/age
+df <- subset(df_num, redcap_event_name == "enrollment_1_arm_1")
+
+# Breakdown is women/men at 3 age groups <= 55, 56 - 64, >= 65
+df$ageBin <- ifelse(df$age <= 55, 0, ifelse(df$age < 65, 1, 2))
+
+# Super variable options! Gender and sex!
+df$sexy[df$ageBin == 0 & df$gend == 0] <- "Young Women"
+df$sexy[df$ageBin == 1 & df$gend == 0] <- "Middle Women"
+df$sexy[df$ageBin == 2 & df$gend == 0] <- "Old Women"
+df$sexy[df$ageBin == 0 & df$gend == 1] <- "Young Men"
+df$sexy[df$ageBin == 1 & df$gend == 1] <- "Middle Men"
+df$sexy[df$ageBin == 2 & df$gend == 1] <- "Old Men"
+
+# Save demo
+df_demo <- df[c('uniqueid', 'age', 'gend', 'ageBin', 'sexy')]
+```
+
+## Coronary artery disease
+
+```{r}
+# Data frame for catherizations
+df <- subset(df_num, redcap_event_name == "enrollment_1_arm_1")
+
+# Select variables for angiography
+dxCad <- c(
+  'uniqueid',
+  'prevmi',
+  'cad',
+  'cadhist',
+  'ang1results'
+)
+
+# Restrict data
+df <- df[c(dxCad)]
+
+# Evaluate if CAD Present
+df$ihd <- 0
+df$ihd[df$prevmi == 1] <- 1
+df$ihd[df$cad == 1] <- 1
+df$ihd[df$cadhist == 1] <- 1
+df$ihd[df$ang1results == 1] <- 1
+
+# Final df
+df_cad <- df
+```
+
+## Mortality and outcomes
+
+```{r}
+# Data of mortality
+df <- 
+  subset(df_num, redcap_event_name %in% c("1year_followup_arm_1", "2yearly_follow_up_arm_1", "5year_followup_arm_1", "10year_follow_up_arm_1"))
+
+# Select vars
+df <- df[c("uniqueid", "redcap_event_name", "pstatusyr")]
+
+# Overall patient status
+df %>%
+  group_by(uniqueid) %>%
+  summarise(Status = sum(pstatusyr, na.rm = TRUE))
+df <- aggregate(df$pstatusyr, by = list(uniqueid = df$uniqueid), FUN=sum, na.rm = TRUE, na.action = NULL)
+
+# Rename the column
+names(df)[2] <- "status"
+df$status[df$status > 0] <- 1
+
+# Save
+df_status <- df
+```
+
+
+# Analysis of MDD and CAD
+
+```{r}
+# Super data frame!
+df <- inner_join(df_demo, df_sad, by = 'uniqueid') %>%
+  inner_join(., df_cad, by = 'uniqueid') %>%
+  inner_join(., df_status, by = 'uniqueid')
+
+df$sad %<>% factor()
+df$ihd %<>% factor()
+df$ageBin %<>% factor()
+df$status %<>% factor()
+df$sexy %<>% factor()
+
+# CompareGroups
+cmp <- compareGroups(ihd ~ sexy + phq, data = df)
+cmpTable <- createTable(cmp)
+
+
+# Predict CAD
+mCad <- glm(ihd ~ phq*sexy, data = df, family = binomial)
+mDead <- glm(status ~ phq*sexy*ihd, data = df, family = binomial)
+
+```
+
+
