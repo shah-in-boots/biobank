@@ -152,7 +152,7 @@ describe(df_status)
 
 # Analysis of MDD and CAD
 
-```{r}
+```{r, results='asis'}
 # Super data frame!
 df <- inner_join(df_demo, df_sad, by = 'uniqueid') %>%
   inner_join(., df_cad, by = 'uniqueid') %>%
