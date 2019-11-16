@@ -15,6 +15,7 @@ reshape2,
 gridExtra,
 RColorBrewer,
 viridis,
+GGally,
 
 # Statistical tools
 Hmisc,

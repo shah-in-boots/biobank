@@ -8,10 +8,11 @@ gridExtra
 RColorBrewer
 viridisLite
 viridis
+ggplot2
+GGally
 lattice
 survival
 Formula
-ggplot2
 Hmisc
 psych
 Matrix

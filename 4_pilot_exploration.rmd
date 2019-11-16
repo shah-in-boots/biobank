@@ -1,0 +1,139 @@
+---
+title: Depression, HRV, and CAD Pilot Study
+subtitle: the Emory Cardiovascular Biobank 
+author: Anish Shah
+output: pdf_document
+---
+
+```{r setup and script args, global_options, include=FALSE}
+# Start time
+alpha_time <- Sys.time()
+
+# Knitr options
+knitr::opts_chunk$set(
+  cache = TRUE,
+  eval = TRUE,
+  include = TRUE,
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  options("scipen" = 999, "digits = 2")
+)
+```
+
+```{r load up data, include = FALSE}
+# Libraries
+source("1_libraries.R")
+
+# Folder locations
+folder <- file.path(getwd(), "proc_data", name)
+raw_folder <- file.path(getwd(), "raw_data")
+
+# Read in the files
+source("2a_vivalnk.R")
+source("2b_hrv.R")
+source("2c_biobank.R")
+
+# Source Tidying
+source("3_tidy.R")
+
+# End of process
+omega_time <- Sys.time()
+cat("Time to load libraries, intake data, and tidy it...")
+print(omega_time - alpha_time)
+```
+
+## Overview of HRV data
+
+The processed HRV from MATLAB toolbox has created a CSV file with all HRV variables computed. Below is a description:
+
+- Length of recording: `r nrow(rawfile) * increment / 60 / 60` hours
+- Increment window: `r as.numeric(hrvparams[hrvparams$Tab1=="increment",2])`
+- Window length: `r as.numeric(hrvparams[hrvparams$Tab1 == "windowlength", 2])`
+- Data not analyzed: `r as.numeric(removed$PercentNotAnalyzed[1])`%
+
+The data columns are: `r names(df)`
+
+## First Pass Visualization
+
+```{r HRV graphs}
+# Visualize data
+all <-
+  gather(df, key = "hrv", value = "value", -time) %>%
+  ggplot(., aes(x = time, y = value, color = hrv)) +
+  geom_smooth() +
+  scale_x_datetime(date_breaks = "3 hours", date_labels = "%H") +
+  geom_vline(xintercept = cath_time, linetype = 4) +
+  facet_wrap(~hrv, scales = "free_y") +
+  scale_color_viridis(discrete = TRUE) + 
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Heart Rate Variability",
+    x = "Time in Hours",
+    y = "HRV"
+  )
+
+psa <- 
+  gather(df[c("time","HF","LF","VLF","TP","LFHF")], key = "hrv", value = "value", -time) %>%
+  ggplot(., aes(x = time, y = value, color = hrv)) +
+  scale_x_datetime(date_breaks = "1 hour", date_labels = "%H") +
+  geom_vline(xintercept = cath_time, linetype = 4) +
+  geom_smooth() +
+  scale_color_viridis(discrete = TRUE) + 
+  theme_minimal() +
+  labs(
+    title = "Power spectral analysis",
+    x = "Time in Hours",
+    y = "HRV"
+  )
+
+accel <- 
+  gather(df[c("time","AC", "DC")], key = "hrv", value = "value", -time) %>%
+  ggplot(., aes(x = time, y = value, color = hrv)) +
+  scale_x_datetime(date_breaks = "1 hour", date_labels = "%H") +
+  geom_vline(xintercept = cath_time, linetype = 4) +
+  geom_smooth() +
+  scale_color_viridis_d() + 
+  theme_minimal() +
+  labs(
+    title = "Acceleration and Deceleration Capacity",
+    x = "Time in Hours",
+    y = "log(HRV)"
+  )
+
+timeDomain <-
+  gather(df[c("time","SDNN","RMSSD","PNN50")], key = "hrv", value = "value", -time) %>%
+  ggplot(., aes(x = time, y = value, color = hrv)) +
+  scale_x_datetime(date_breaks = "1 hour", date_labels = "%H") +
+  geom_vline(xintercept = cath_time, linetype = 4) +
+  geom_smooth() +
+  scale_color_viridis_d() + 
+  theme_minimal() +
+  labs(
+    title = "Time Domain",
+    x = "Time in Hours",
+    y = "HRV"
+  )
+
+entropy <-
+  gather(df[c("time","SampEn", "ApEn")], key = "hrv", value = "value", -time) %>%
+  ggplot(., aes(x = time, y = value, color = hrv)) +
+  scale_x_datetime(date_breaks = "1 hour", date_labels = "%H") +
+  geom_vline(xintercept = cath_time, linetype = 4) +
+  geom_smooth() +
+  scale_color_viridis_d() + 
+  theme_minimal() +
+  labs(
+    title = "Time Domain",
+    x = "Time in Hours",
+    y = "HRV"
+  )
+  
+# Save the figures
+ggsave(file.path(directory, "all_hrv.png"), plot = all)
+ggsave(file.path(directory, "timeDomain_hrv.png"), plot = timeDomain)
+ggsave(file.path(directory, "entropy_hrv.png"), plot = entropy)
+ggsave(file.path(directory, "psa_hrv.png"), plot = psa)
+ggsave(file.path(directory, "accel_hrv.png"), plot = accel)
+```
