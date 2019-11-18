@@ -12,15 +12,16 @@
 df <- psych
 
 # Create phq9
-# Modified it so NA rows won't interfere c- overall score
+# Modified it so NA rows won"t interfere c- overall score
 # If some answers are done, its unlikely that total score will be zero
 df %<>%
  mutate(phq = select(., mdplea:mddead) %>% rowSums(na.rm = TRUE)) 
-df$missing <- rowSums(df[c('uniqueid', phq9)])
+df$missing <- rowSums(df[phq9])
 df$phq[df$phq == 0 & is.na(df$missing)] <- NA
 
 # Cut off of 10 for PHQ9
 df$sad <- ifelse(df$phq >9, 1, 0)
+df$sad %<>% factor()
 
 # Drop row that is missing
 df <- subset(df, select = -missing)
@@ -34,7 +35,7 @@ psych <- df
 ## Medical history {{{ ====
 
 # need to reconcile the two clinical and chart histories
-df <- inner_join(clinHx, chartHx, by = 'uniqueid')
+df <- inner_join(clinHx, chartHx, by = "patid")
 
 # Final form
 history <- df
@@ -47,7 +48,7 @@ history <- df
 df <- cath
 
 # Stenoses are present?
-df$stenosis <- df$ang1results
+df$stenosis <- df$ang1results %>% factor()
 
 ## CASS score generation
 
@@ -69,11 +70,11 @@ df$stenosis <- df$ang1results
 # THe epicardial vessels should be scores
 df$lm <- df$ang1sten1
 df$lm[is.na(df$lm)] <- 0
-df$lad <- apply(X = df[c('ang1sten2', 'ang1sten3', 'ang1sten4', 'ang1sten5')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$lad <- apply(X = df[c("ang1sten2", "ang1sten3", "ang1sten4", "ang1sten5")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$lad[df$lad == -Inf] <- 0
-df$lcx <- apply(X = df[c('ang1sten6', 'ang1sten7', 'ang1sten8')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$lcx <- apply(X = df[c("ang1sten6", "ang1sten7", "ang1sten8")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$lcx[df$lcx == -Inf] <- 0
-df$rca <- apply(X = df[c('ang1sten9', 'ang1sten10', 'ang1sten11', 'ang1sten12')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$rca <- apply(X = df[c("ang1sten9", "ang1sten10", "ang1sten11", "ang1sten12")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$rca[df$rca == -Inf] <- 0
 
 # CASS-50 score is needed
@@ -93,14 +94,14 @@ df$cass70[df$rca >= 70] <- df$cass70[df$rca >= 70] + 1
 df$cass70[is.na(df$ang1results)] <- NA
 
 svar <- c(
-'uniqueid', 
-'stenosis', 
-'lm', 
-'lad', 
-'lcx', 
-'rca',
-'cass50', 
-'cass70'
+"patid", 
+"stenosis", 
+"lm", 
+"lad", 
+"lcx", 
+"rca",
+"cass50", 
+"cass70"
 )
 
 tmp <- df[svar]
@@ -125,7 +126,7 @@ tmp <- df[svar]
 # Appropriately named arteries for scoring
 df <- 
   cath %>%
-  select(., c(uniqueid, ang1sten1:ang1sten22)) %>%
+  select(., c(patid, ang1sten1:ang1sten22)) %>%
   mutate_all(., ~replace(., is.na(.), 0)) 
 
 # Need to have overal stenoses points
@@ -161,13 +162,13 @@ df %<>%
     )
 
 # Find maximum points per groups of arteries
-df$plad <- apply(X = df[c('plad1', 'plad2')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$plad <- apply(X = df[c("plad1", "plad2")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$plad[df$plad == -Inf] <- 0
 
-df$rca <- apply(X = df[c('rca1', 'rca2', 'rca3', 'rca4')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$rca <- apply(X = df[c("rca1", "rca2", "rca3", "rca4")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$rca[df$rca == -Inf] <- 0
 
-df$om <- apply(X = df[c('om1', 'om2', 'om3')], MARGIN = 1, FUN = max, na.rm = TRUE)
+df$om <- apply(X = df[c("om1", "om2", "om3")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$om[df$om == -Inf] <- 0
 
 df %<>% select(., -c(plad1, plad2, rca1, rca2, rca3, rca4, om1, om2, om3))
@@ -199,7 +200,7 @@ df$gensini <-
 df$gensini[is.na(cath$ang1results)] <- NA
 
 # Final data set
-angio_scores <- inner_join(df[c("uniqueid", "gensini")], tmp, by = "uniqueid")
+angio_scores <- inner_join(df[c("patid", "gensini")], tmp, by = "patid")
 
 # }}}
 
@@ -238,5 +239,10 @@ hrv_blocks <- df %>%
     SampEn = mean(SampEn, na.rm = TRUE),
     ApEn = mean(ApEn, na.rm = TRUE)
   )
+
+# Long data as well
+hrv_long <- df %>%
+  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, hour))
+
 
 # }}}

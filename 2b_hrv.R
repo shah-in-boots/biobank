@@ -37,6 +37,9 @@ read_hrv <- function(name) {
   # Convert time index into actual time, include sequence for missing
   df$index <- seq(from = 0, to = length(df$index)*5-1, by = 5)
   df$clock <- seconds(df$index) + hrv_quality$Start[hrv_quality$patid == name]
+  year(df$clock) <- year(today())
+  month(df$clock) <- month(today())
+  day(df$clock) <- day(today())
   df$hour <- hour(df$clock)
   
   return(df)
