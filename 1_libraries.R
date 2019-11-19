@@ -8,6 +8,7 @@ pacman::p_load(
 rmarkdown,
 knitr,
 tinytex,
+flextable,
 
 # Visualization
 ggthemes,

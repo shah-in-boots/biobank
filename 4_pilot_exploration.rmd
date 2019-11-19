@@ -112,7 +112,7 @@ df$setting <- df_txt$setting
 # Table 1
 compareGroups(setting ~ gend + race + blbmi + adm_reason, data = df) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Patient description")
+  export2latex(., format = "markdown", caption = "Patient description")
 ```
 
 ## Depression
@@ -136,7 +136,7 @@ levels(df$sad) <- c("Low Depression", "High Depression")
 # Depression comparison
 compareGroups(data = df, sad ~ gend + race + adm_reason) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Depression scoring")
+  export2latex(., format = "markdown", caption = "Depression scoring")
 ```
 
 ## Coronary artery disease
@@ -159,7 +159,7 @@ df$race <- df_txt$race
 # CAD scoring systems
 compareGroups(data = df, ~ cass50 + cass70 + gensini + stenosis) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "CAD Severity Scores")
+  export2latex(., format = "markdown", caption = "CAD Severity Scores")
 ```
 
 ## Heart rate variability
@@ -181,7 +181,7 @@ df <- hrv_params
 # HRV quality
 compareGroups(data = df, ~ Duration + PercentNotAnalyzed + PercentLowQualityWind) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "HRV quality")
+  export2latex(., format = "markdown", caption = "HRV quality")
 ```
 
 ### Overview of all HRV measures {.allowframebreaks}
@@ -192,17 +192,17 @@ df <- hrv_proc
 # Time domain
 compareGroups(data = df, ~ BPM + SDNN + RMSSD + PNN50) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Time Domain")
+  export2latex(., format = "markdown", caption = "Time Domain")
 
 # Frequency domain
 compareGroups(data = df, ~ HF + LF + VLF + ULF + TP + LFHF) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Frequency Domain")
+  export2latex(., format = "markdown", caption = "Frequency Domain")
 
 # Other measures
 compareGroups(data = df, ~ AC + DC + SampEn + ApEn) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Additional Measures")
+  export2latex(., format = "markdown", caption = "Additional Measures")
 ```
 
 ```{r HRV graphs}
