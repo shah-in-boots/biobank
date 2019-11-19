@@ -19,12 +19,12 @@ proc_folder = [pwd filesep 'proc_data'];
 
 % Identify all VivaLNK files
 files = dir(fullfile(raw_folder, '*.txt'));
-patients = regexprep({files.name}, '.txt', '');
-numsub = length(patients);
+%patients = regexprep({files.name}, '.txt', '');
+%numsub = length(patients);
 
 % Restrict to just new, unprocessed data
 log = readtable([raw_folder filesep 'patient_log.xlsx']);
-patients = log.ID(log.Status == "new");
+patients = log.ID(log.Status == "processed")';
 numsub = length(patients);
 
 %% Parallel for loop for analysis
