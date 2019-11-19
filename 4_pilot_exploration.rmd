@@ -176,7 +176,7 @@ compareGroups(data = df, ~ cass50 + cass70 + gensini + stenosis) %>%
 ### Quality of HRV data
 
 ```{r}
-df <- hrv_quality
+df <- hrv_params
 
 # HRV quality
 compareGroups(data = df, ~ Duration + PercentNotAnalyzed + PercentLowQualityWind) %>%

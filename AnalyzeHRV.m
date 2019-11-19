@@ -22,6 +22,11 @@ files = dir(fullfile(raw_folder, '*.txt'));
 patients = regexprep({files.name}, '.txt', '');
 numsub = length(patients);
 
+% Restrict to just new, unprocessed data
+log = readtable([raw_folder filesep 'patient_log.xlsx']);
+patients = log.ID(log.Status == "new");
+numsub = length(patients);
+
 %% Parallel for loop for analysis
 
 % Loop, timed with tic toc

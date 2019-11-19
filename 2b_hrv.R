@@ -8,7 +8,7 @@ proc_folder <- file.path(getwd(), 'proc_data')
 patid <- list.dirs(path = proc_folder, recursive = FALSE, full.names = FALSE)
 
 # Need the timestamps of all the data
-hrv_quality <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'), col_names = TRUE) %>% na.omit()
+hrv_params <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'), col_names = TRUE) %>% na.omit()
 
 # }}}
 
@@ -36,11 +36,7 @@ read_hrv <- function(name) {
  
   # Convert time index into actual time, include sequence for missing
   df$index <- seq(from = 0, to = length(df$index)*5-1, by = 5)
-  df$clock <- seconds(df$index) + hrv_quality$Start[hrv_quality$patid == name]
-  year(df$clock) <- year(today())
-  month(df$clock) <- month(today())
-  day(df$clock) <- day(today())
-  df$hour <- hour(df$clock)
+  df$clock <- seconds(df$index) + hrv_params$Start[hrv_params$patid == name]
   
   return(df)
 }
@@ -68,7 +64,7 @@ for (i in seq_along(patid)) {
   hrvparams %<>% pivot_wider(., names_from = Tab1, values_from = Tab2)
  
   # The parameter data should be combined
-  x <- inner_join(removed, hrvparams, by = 'patid') 
+  x <- removed
   
   if(exists("df_param")) {
     df_param %<>% bind_rows(., x)
@@ -83,7 +79,7 @@ for (i in seq_along(patid)) {
 }
 
 # Save the all the data
-hrv_quality %<>% inner_join(., df_param)
+hrv_params %<>% inner_join(., df_param)
 hrv_raw <- df_hrv
 rm(df_hrv, df_param)
 
