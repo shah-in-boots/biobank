@@ -231,7 +231,7 @@ df <- na.omit(df)
 # Visualizing all the data will be expensive
 # Even reducing to just a few patients may be exhaustingly slow
 gTimeHRV <-
-  ggplot(subset(df, patid %in% c("06931", "06955", "07027", "07052", "06944")), aes(x = clock, y = values)) +
+  ggplot(df, aes(x = clock, y = values)) +
   facet_wrap(~ hrv, ncol = 2) +
   stat_summary(aes(group = hrv, y = values), fun.data = "mean_cl_normal", geom = "ribbon", alpha = 1 / 5) +
   stat_summary(aes(group = hrv, colour = hrv, y = values), fun.y = mean, geom = "line") +
@@ -251,25 +251,58 @@ gTimeHRV <-
 
 # Aim 1: Relationship between Depression and ANS Dysfunction
 
-```{r exploring depression and HRV}
+### Differences in population
+
+```{r basic stats for depression}
 df <- inner_join(psych[c("patid", "sad")], hrv_proc, by = "patid")
 
 # Distribution of sadness
-ks.test(df$HF[df$sad == 1], df$HF[df$sad == 0])
-ks.test(df$LF[df$sad == 1], df$LF[df$sad == 0])
-ks.test(df$VLF[df$sad == 1], df$VLF[df$sad == 0])
-ks.test(df$ULF[df$sad == 1], df$ULF[df$sad == 0])
-ks.test(df$TP[df$sad == 1], df$TP[df$sad == 0])
-ks.test(df$LFHF[df$sad == 1], df$LFHF[df$sad == 0])
-ks.test(df$AC[df$sad == 1], df$AC[df$sad == 0])
-ks.test(df$DC[df$sad == 1], df$DC[df$sad == 0])
-ks.test(df$LF[df$sad == 1], df$LF[df$sad == 0])
-ks.test(df$SampEn[df$sad == 1], df$SampEn[df$sad == 0])
-ks.test(df$ApEn[df$sad == 1], df$ApEn[df$sad == 0])
-ks.test(df$BPM[df$sad == 1], df$BPM[df$sad == 0])
+tmp <- 
+  df %>%
+  do(
+    HF = ks.test(subset(df, sad == 1)$HF, subset(df, sad == 0)$HF) %>% tidy,
+    LF = ks.test(subset(df, sad == 1)$LF, subset(df, sad == 0)$LF) %>% tidy,
+    VLF = ks.test(subset(df, sad == 1)$VLF, subset(df, sad == 0)$VLF) %>% tidy,
+    ULF = ks.test(subset(df, sad == 1)$ULF, subset(df, sad == 0)$ULF) %>% tidy,
+    TP = ks.test(subset(df, sad == 1)$TP, subset(df, sad == 0)$TP) %>% tidy,
+    LFHF = ks.test(subset(df, sad == 1)$LFHF, subset(df, sad == 0)$LFHF) %>% tidy,
+    AC = ks.test(subset(df, sad == 1)$AC, subset(df, sad == 0)$AC) %>% tidy,
+    DC = ks.test(subset(df, sad == 1)$DC, subset(df, sad == 0)$DC) %>% tidy,
+    SampEn = ks.test(subset(df, sad == 1)$SampEn, subset(df, sad == 0)$SampEn) %>% tidy,
+    ApEn = ks.test(subset(df, sad == 1)$ApEn, subset(df, sad == 0)$ApEn) %>% tidy,
+    BPM = ks.test(subset(df, sad == 1)$BPM, subset(df, sad == 0)$BPM) %>% tidy
+  ) %>%
+  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "ks.test")
+
+basic_stats <- 
+  df %>%
+  do(
+    HF = t.test(HF ~ sad, na.omit(df)) %>% tidy,
+    LF = t.test(LF ~ sad, na.omit(df)) %>% tidy,
+    VLF = t.test(VLF ~ sad, na.omit(df)) %>% tidy,
+    ULF = t.test(ULF ~ sad, na.omit(df)) %>% tidy,
+    TP = t.test(TP ~ sad, na.omit(df)) %>% tidy,
+    LFHF = t.test(LFHF ~ sad, na.omit(df)) %>% tidy,
+    AC = t.test(AC ~ sad, na.omit(df)) %>% tidy,
+    DC = t.test(DC ~ sad, na.omit(df)) %>% tidy,
+    SampEn = t.test(SampEn ~ sad, na.omit(df)) %>% tidy,
+    ApEn = t.test(ApEn ~ sad, na.omit(df)) %>% tidy,
+    BPM = t.test(BPM ~ sad, na.omit(df)) %>% tidy
+  ) %>%
+  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "t.test") %>%
+  inner_join(tmp, ., by = "hrv")
+
+# Extract pvalues
+basic_stats$ks.stat <- map(basic_stats$ks.test, 1) %>% unlist()
+basic_stats$ks.pvalue <- map(basic_stats$ks.test, 2) %>% unlist()
+basic_stats$t.stat <- map(basic_stats$t.test, 4) %>% unlist()
+basic_stats$t.pvalue <- map(basic_stats$t.test, 5) %>% unlist()
+
+# Present findings
+xtable(basic_stats[c("hrv", "ks.pvalue", "t.pvalue")])
 ```
 
-
+### Hourly differences
 
 ```{r circadian depression and T-test}
 # Df for visualization
@@ -332,6 +365,7 @@ gDiurnal
 ```
 
 ### Visualizing Differences in HRV by Depresion
+
 ```{r HRV x depression plot}
 df <- 
   inner_join(hrv_proc, psych[c("patid", "sad")], by = "patid") %>%
@@ -355,27 +389,60 @@ ggplot(df, aes(x = clock, y = values, group = factor(sad), color = factor(sad)))
 
 # Aim 2: Relationship between CAD and ANS Dysfunction
 
-### Differences in HRV distribution by CAD
+### Differences in population
 
-```{r}
-df <- inner_join(angio_scores[c("patid", "stenosis")], hrv_proc, by = "patid")
+```{r basic stats for CAD}
+df <- inner_join(angio_scores, hrv_proc, by = "patid")
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
 
-ks.test(df$HF[df$stenosis == 1], df$HF[df$stenosis == 0])
-ks.test(df$LF[df$stenosis == 1], df$LF[df$stenosis == 0])
-ks.test(df$VLF[df$stenosis == 1], df$VLF[df$stenosis == 0])
-ks.test(df$ULF[df$stenosis == 1], df$ULF[df$stenosis == 0])
-ks.test(df$TP[df$stenosis == 1], df$TP[df$stenosis == 0])
-ks.test(df$LFHF[df$stenosis == 1], df$LFHF[df$stenosis == 0])
-ks.test(df$AC[df$stenosis == 1], df$AC[df$stenosis == 0])
-ks.test(df$DC[df$stenosis == 1], df$DC[df$stenosis == 0])
-ks.test(df$LF[df$stenosis == 1], df$LF[df$stenosis == 0])
-ks.test(df$SampEn[df$stenosis == 1], df$SampEn[df$stenosis == 0])
-ks.test(df$ApEn[df$stenosis == 1], df$ApEn[df$stenosis == 0])
-ks.test(df$BPM[df$stenosis == 1], df$BPM[df$stenosis == 0])
+# Distribution of sadness
+tmp <- 
+  df %>%
+  do(
+    HF = ks.test(subset(df, cad == 1)$HF, subset(df, cad == 0)$HF) %>% tidy,
+    LF = ks.test(subset(df, cad == 1)$LF, subset(df, cad == 0)$LF) %>% tidy,
+    VLF = ks.test(subset(df, cad == 1)$VLF, subset(df, cad == 0)$VLF) %>% tidy,
+    ULF = ks.test(subset(df, cad == 1)$ULF, subset(df, cad == 0)$ULF) %>% tidy,
+    TP = ks.test(subset(df, cad == 1)$TP, subset(df, cad == 0)$TP) %>% tidy,
+    LFHF = ks.test(subset(df, cad == 1)$LFHF, subset(df, cad == 0)$LFHF) %>% tidy,
+    AC = ks.test(subset(df, cad == 1)$AC, subset(df, cad == 0)$AC) %>% tidy,
+    DC = ks.test(subset(df, cad == 1)$DC, subset(df, cad == 0)$DC) %>% tidy,
+    SampEn = ks.test(subset(df, cad == 1)$SampEn, subset(df, cad == 0)$SampEn) %>% tidy,
+    ApEn = ks.test(subset(df, cad == 1)$ApEn, subset(df, cad == 0)$ApEn) %>% tidy,
+    BPM = ks.test(subset(df, cad == 1)$BPM, subset(df, cad == 0)$BPM) %>% tidy
+  ) %>%
+  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "ks.test")
+
+basic_stats <- 
+  df %>%
+  do(
+    HF = t.test(HF ~ cad, na.omit(df)) %>% tidy,
+    LF = t.test(LF ~ cad, na.omit(df)) %>% tidy,
+    VLF = t.test(VLF ~ cad, na.omit(df)) %>% tidy,
+    ULF = t.test(ULF ~ cad, na.omit(df)) %>% tidy,
+    TP = t.test(TP ~ cad, na.omit(df)) %>% tidy,
+    LFHF = t.test(LFHF ~ cad, na.omit(df)) %>% tidy,
+    AC = t.test(AC ~ cad, na.omit(df)) %>% tidy,
+    DC = t.test(DC ~ cad, na.omit(df)) %>% tidy,
+    SampEn = t.test(SampEn ~ cad, na.omit(df)) %>% tidy,
+    ApEn = t.test(ApEn ~ cad, na.omit(df)) %>% tidy,
+    BPM = t.test(BPM ~ cad, na.omit(df)) %>% tidy
+  ) %>%
+  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "t.test") %>%
+  inner_join(tmp, ., by = "hrv")
+
+# Extract pvalues
+basic_stats$ks.stat <- map(basic_stats$ks.test, 1) %>% unlist()
+basic_stats$ks.pvalue <- map(basic_stats$ks.test, 2) %>% unlist()
+basic_stats$t.stat <- map(basic_stats$t.test, 4) %>% unlist()
+basic_stats$t.pvalue <- map(basic_stats$t.test, 5) %>% unlist()
+
+# Present data
+xtable(basic_stats[c("hrv", "ks.pvalue", "t.pvalue")])
 ```
 
-
 ### Visualizing Differences in HRV by CAD
+
 ```{r HRV x CAD plot}
 
 df <- 
@@ -399,6 +466,7 @@ ggplot(df, aes(x = clock, y = values, group = factor(stenosis), color = factor(s
   )
 ```
 
+### Hourly differences {.allowframebreaks}
 ```{r, circadian CAD}
 # Df for visualization
 df <-

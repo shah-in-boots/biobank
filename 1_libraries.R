@@ -41,7 +41,8 @@ lubridate,
 stringr,
 broom,
 plyr,
-dplyr
+dplyr,
+xtable
 
 )
 # }}}
