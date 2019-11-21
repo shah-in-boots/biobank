@@ -556,9 +556,10 @@ df$cad <- ifelse(df$cass50 > 1, 1, 0)
 
 ```{r}
 df <- 
-  pivot_longer(hrv_first_hour, names_to = "hrv", values_to = "value", -c(patid, hour, index, clock)) %>%
-  inner_join(angio_scores, ., by = "patid")
-df$cad <- ifelse(df$cass70 > 1, 1, 0)
+  pivot_longer(hrv_proc, names_to = "hrv", values_to = "value", -c(patid, index, index, clock)) %>%
+  inner_join(angio_scores, ., by = "patid") %>%
+  na.omit()
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
 
 # Visualize "first hour" data
 ggplot(df, aes(x = value, y = cad, color = hrv)) +
@@ -568,9 +569,9 @@ ggplot(df, aes(x = value, y = cad, color = hrv)) +
   theme_minimal() +
   theme(legend.position = "none") +
   labs(
-    title = "First hour of HRV (before cath) and depression",
-    x = "PHQ score",
-    y = "HRV"
+    title = "Does HRV Classify patients with CAD?",
+    x = "HRV",
+    y = "CAD"
   )
 
 # REgrsssions
@@ -578,5 +579,5 @@ df <- inner_join(hrv_proc, angio_scores, by = "patid") %>% na.omit()
 df$cad <- ifelse(df$cass50 > 1, 1, 0)
 df$hour <- hour(df$clock)
 
-glm(cad ~ LF, family = "binomial", data = df) %>% summary()
+glm(cad ~ LF*hour, family = "binomial", data = df) %>% summary()
 ```
