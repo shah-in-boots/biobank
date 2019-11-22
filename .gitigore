@@ -1,0 +1,27 @@
+# R project files to be ignored
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.rdb
+*.rdx
+.Rproj.user
+packrat/lib*/
+packrat/src/
+
+# Ignore data files for HIPAA (project is private, so should be fine)
+
+# Ignore temp word files
+~\$*.docx
+
+# Ignore images stored?
+
+# Ignore large data files
+*.txt
+*.tex
+*.mat
+*.wqrs
+*.sqijw
+*.sqijs
+*.jqrs
+*.hea
