@@ -254,52 +254,11 @@ gTimeHRV <-
 ### Differences in population
 
 ```{r basic stats for depression}
-df <- inner_join(psych[c("patid", "sad")], hrv_proc, by = "patid")
+df <- inner_join(psych[c("patid", "sad", "phq")], hrv_first_hour, by = "patid")
 
-# Distribution of sadness
-tmp <- 
-  df %>%
-  do(
-    HF = ks.test(subset(df, sad == 1)$HF, subset(df, sad == 0)$HF) %>% tidy,
-    LF = ks.test(subset(df, sad == 1)$LF, subset(df, sad == 0)$LF) %>% tidy,
-    VLF = ks.test(subset(df, sad == 1)$VLF, subset(df, sad == 0)$VLF) %>% tidy,
-    ULF = ks.test(subset(df, sad == 1)$ULF, subset(df, sad == 0)$ULF) %>% tidy,
-    TP = ks.test(subset(df, sad == 1)$TP, subset(df, sad == 0)$TP) %>% tidy,
-    LFHF = ks.test(subset(df, sad == 1)$LFHF, subset(df, sad == 0)$LFHF) %>% tidy,
-    AC = ks.test(subset(df, sad == 1)$AC, subset(df, sad == 0)$AC) %>% tidy,
-    DC = ks.test(subset(df, sad == 1)$DC, subset(df, sad == 0)$DC) %>% tidy,
-    SampEn = ks.test(subset(df, sad == 1)$SampEn, subset(df, sad == 0)$SampEn) %>% tidy,
-    ApEn = ks.test(subset(df, sad == 1)$ApEn, subset(df, sad == 0)$ApEn) %>% tidy,
-    BPM = ks.test(subset(df, sad == 1)$BPM, subset(df, sad == 0)$BPM) %>% tidy
-  ) %>%
-  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "ks.test")
-
-basic_stats <- 
-  df %>%
-  do(
-    HF = t.test(HF ~ sad, na.omit(df)) %>% tidy,
-    LF = t.test(LF ~ sad, na.omit(df)) %>% tidy,
-    VLF = t.test(VLF ~ sad, na.omit(df)) %>% tidy,
-    ULF = t.test(ULF ~ sad, na.omit(df)) %>% tidy,
-    TP = t.test(TP ~ sad, na.omit(df)) %>% tidy,
-    LFHF = t.test(LFHF ~ sad, na.omit(df)) %>% tidy,
-    AC = t.test(AC ~ sad, na.omit(df)) %>% tidy,
-    DC = t.test(DC ~ sad, na.omit(df)) %>% tidy,
-    SampEn = t.test(SampEn ~ sad, na.omit(df)) %>% tidy,
-    ApEn = t.test(ApEn ~ sad, na.omit(df)) %>% tidy,
-    BPM = t.test(BPM ~ sad, na.omit(df)) %>% tidy
-  ) %>%
-  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "t.test") %>%
-  inner_join(tmp, ., by = "hrv")
-
-# Extract pvalues
-basic_stats$ks.stat <- map(basic_stats$ks.test, 1) %>% unlist()
-basic_stats$ks.pvalue <- map(basic_stats$ks.test, 2) %>% unlist()
-basic_stats$t.stat <- map(basic_stats$t.test, 4) %>% unlist()
-basic_stats$t.pvalue <- map(basic_stats$t.test, 5) %>% unlist()
-
-# Present data
-kable(basic_stats[c("hrv", "ks.pvalue", "t.pvalue")], booktabs = T)
+# Comparison of "best" HRV measures
+compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + NN) %>%
+  createTable(.)
 ```
 
 ### Hourly differences
@@ -413,53 +372,23 @@ ggplot(df, aes(x = phq, y = value, color = hrv)) +
 ### Differences in population
 
 ```{r basic stats for CAD}
-df <- inner_join(angio_scores, hrv_proc, by = "patid")
-df$cad <- ifelse(df$cass50 > 1, 1, 0)
+df <- inner_join(angio_scores, hrv_blocks, by = "patid")
+df$cad1 <- ifelse(df$cass50 > 1, 1, 0)
+df$cad2 <- ifelse(df$cass50 > 2, 1, 0)
+df$cad3 <- ifelse(df$cass50 > 3, 1, 0)
+df$cad4 <- ifelse(df$cass70 > 1, 1, 0)
+df$cad5 <- ifelse(df$cass70 > 2, 1, 0)
+df$cad6 <- ifelse(df$cass70 > 3, 1, 0)
 
-# Distribution of sadness
-tmp <- 
-  df %>%
-  do(
-    HF = ks.test(subset(df, cad == 1)$HF, subset(df, cad == 0)$HF) %>% tidy,
-    LF = ks.test(subset(df, cad == 1)$LF, subset(df, cad == 0)$LF) %>% tidy,
-    VLF = ks.test(subset(df, cad == 1)$VLF, subset(df, cad == 0)$VLF) %>% tidy,
-    ULF = ks.test(subset(df, cad == 1)$ULF, subset(df, cad == 0)$ULF) %>% tidy,
-    TP = ks.test(subset(df, cad == 1)$TP, subset(df, cad == 0)$TP) %>% tidy,
-    LFHF = ks.test(subset(df, cad == 1)$LFHF, subset(df, cad == 0)$LFHF) %>% tidy,
-    AC = ks.test(subset(df, cad == 1)$AC, subset(df, cad == 0)$AC) %>% tidy,
-    DC = ks.test(subset(df, cad == 1)$DC, subset(df, cad == 0)$DC) %>% tidy,
-    SampEn = ks.test(subset(df, cad == 1)$SampEn, subset(df, cad == 0)$SampEn) %>% tidy,
-    ApEn = ks.test(subset(df, cad == 1)$ApEn, subset(df, cad == 0)$ApEn) %>% tidy,
-    BPM = ks.test(subset(df, cad == 1)$BPM, subset(df, cad == 0)$BPM) %>% tidy
-  ) %>%
-  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "ks.test")
+# Comparison of "best" HRV measures at first hour
+# Candidate measures = RMSSD, PNN50, AC .... ULF, LFHF, DC, SDNN
+# Cass50 = ...
+# Cass70 > 1 =  AC, DC, SampEn
+subset(df, hour == 10) %>%
+  compareGroups(data = ., cad4 ~ HF + LF + VLF + ULF + TP + LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn) %>%
+  createTable(.)
 
-basic_stats <- 
-  df %>%
-  do(
-    HF = t.test(HF ~ cad, na.omit(df)) %>% tidy,
-    LF = t.test(LF ~ cad, na.omit(df)) %>% tidy,
-    VLF = t.test(VLF ~ cad, na.omit(df)) %>% tidy,
-    ULF = t.test(ULF ~ cad, na.omit(df)) %>% tidy,
-    TP = t.test(TP ~ cad, na.omit(df)) %>% tidy,
-    LFHF = t.test(LFHF ~ cad, na.omit(df)) %>% tidy,
-    AC = t.test(AC ~ cad, na.omit(df)) %>% tidy,
-    DC = t.test(DC ~ cad, na.omit(df)) %>% tidy,
-    SampEn = t.test(SampEn ~ cad, na.omit(df)) %>% tidy,
-    ApEn = t.test(ApEn ~ cad, na.omit(df)) %>% tidy,
-    BPM = t.test(BPM ~ cad, na.omit(df)) %>% tidy
-  ) %>%
-  pivot_longer(., cols = names(.), names_to = "hrv", values_to = "t.test") %>%
-  inner_join(tmp, ., by = "hrv")
-
-# Extract pvalues
-basic_stats$ks.stat <- map(basic_stats$ks.test, 1) %>% unlist()
-basic_stats$ks.pvalue <- map(basic_stats$ks.test, 2) %>% unlist()
-basic_stats$t.stat <- map(basic_stats$t.test, 4) %>% unlist()
-basic_stats$t.pvalue <- map(basic_stats$t.test, 5) %>% unlist()
-
-# Present data
-kable(basic_stats[c("hrv", "ks.pvalue", "t.pvalue")], booktabs = T)
+# At 10 AM... >70% CAD = HF, TP, SDNN, RMSSD, PNN50, AC, DC, ApEn
 ```
 
 ### Visualizing Differences in HRV by CAD
