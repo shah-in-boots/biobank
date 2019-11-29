@@ -194,6 +194,9 @@ df <- df[c("uniqueid", phq9)]
 # SUm the PHq9
 df %<>%
  mutate(phq = select(., mdplea:mdspeak) %>% rowSums(na.rm = TRUE)) 
+df$phq[df$phq == 0] <- NA
+df$phq[!is.na(df$phq)] <- df$phq[!is.na(df$phq)] - 9 # Since start at 0
+df$phq[df$phq <= 0] <- 0
 
 # CUt off of 10 for hte PHQ9
 df$sad <- ifelse(df$phq >9, 1, 0)

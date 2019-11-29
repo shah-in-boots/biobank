@@ -8,6 +8,7 @@ pacman::p_load(
 rmarkdown,
 knitr,
 tinytex,
+flextable,
 
 # Visualization
 ggthemes,
@@ -24,7 +25,6 @@ lme4,
 nlme,
 rms,
 boot,
-survival,
 tables,
 compareGroups,
 Epi,
@@ -41,7 +41,8 @@ lubridate,
 stringr,
 broom,
 plyr,
-dplyr
+dplyr,
+xtable
 
 )
 # }}}

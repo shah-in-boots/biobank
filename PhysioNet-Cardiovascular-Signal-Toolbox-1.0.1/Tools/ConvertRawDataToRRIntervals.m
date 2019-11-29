@@ -1,4 +1,4 @@
-function [t,rr,jqrs_ann,SQIjw, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ECG_RawData ,HRVparams, subjectID)
+function [t,rr,jqrs_ann,SQIjw, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ECG_RawData, HRVparams, subjectID)
 %   [t,rr,jqrs_ann,sqijs, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ECG_RawData ,HRVparams, subjectID)  
 %
 %	OVERVIEW:

@@ -1,13 +1,8 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 rmarkdown
 knitr
 tinytex
+flextable
 ggthemes
 reshape2
 gridExtra
@@ -24,13 +19,10 @@ psych
 Matrix
 lme4
 nlme
-SparseM
-rms
 boot
 tables
 haplo.stats
 mvtnorm
-parallel
 SNPassoc
 compareGroups
 Epi
@@ -51,3 +43,4 @@ readxl
 lubridate
 broom
 plyr
+xtable

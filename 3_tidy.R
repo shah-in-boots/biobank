@@ -15,16 +15,14 @@ df <- psych
 # Modified it so NA rows won"t interfere c- overall score
 # If some answers are done, its unlikely that total score will be zero
 df %<>%
- mutate(phq = select(., mdplea:mddead) %>% rowSums(na.rm = TRUE)) 
-df$missing <- rowSums(df[phq9])
-df$phq[df$phq == 0 & is.na(df$missing)] <- NA
+  mutate(phq = select(., mdplea:mdspeak) %>% rowSums(na.rm = TRUE)) 
+df$phq[df$phq == 0] <- NA
+df$phq[!is.na(df$phq)] <- df$phq[!is.na(df$phq)] - 9 # Since start at 0
+df$phq[df$phq <= 0] <- 0
 
 # Cut off of 10 for PHQ9
 df$sad <- ifelse(df$phq >9, 1, 0)
 df$sad %<>% factor()
-
-# Drop row that is missing
-df <- subset(df, select = -missing)
 
 # Return to original df
 psych <- df
@@ -257,5 +255,17 @@ hrv_blocks <- df %>%
 # Can restrict it to good quality data
 df <- left_join(hrv_blocks, hrv_quality, by = c("patid", "hour"))
 hrv_qual_blocks <- subset(df, missing < 0.2)
+
+# First hour collected data
+df <- 
+  hrv_proc %>%
+  na.omit() %>%
+  group_by(patid) %>%
+  slice(which.min(clock))
+
+df$hour <- hour(df$clock)
+df <- subset(df, select = c(patid, index, clock, hour))
+
+hrv_first_hour <- inner_join(hrv_blocks, df, by = c("patid", "hour"))
 
 # }}}

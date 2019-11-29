@@ -10,6 +10,7 @@ packrat/lib*/
 packrat/src/
 
 # Ignore data files for HIPAA (project is private, so should be fine)
+# No files for now
 
 # Ignore temp word files
 ~\$*.docx

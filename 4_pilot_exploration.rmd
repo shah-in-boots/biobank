@@ -25,7 +25,6 @@ header-includes:
   - \usepackage{tabu}
   - \usepackage{threeparttable}
 always_allow_html: yes
-
 ---
 
 ```{r setup and script args, global_options, include=FALSE}
@@ -42,7 +41,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   dpi = 600,
   dev = "png",
-  options("scipen" = 999, "digits" = 2),
+  options("scipen" = 999, "digits" = 3),
   tinytex.verbose = TRUE,
   tidy = FALSE
 )
@@ -101,7 +100,7 @@ This is a pilot study examining the relationship between depression and CAD. We 
 
 ### Demographic description
 
-```{r demographics}
+```{r demographics, results = "asis"}
 df <- demo
 df$adm_reason <- df_txt$adm_reason
 df$gend <- df_txt$gend
@@ -110,9 +109,9 @@ df$setting <- df_txt$setting
 
 
 # Table 1
-compareGroups(setting ~ gend + race + blbmi + adm_reason, data = df) %>%
+compareGroups(~ gend + race + blbmi + adm_reason + setting + age, data = df) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Patient description")
+  export2md(., format = "latex", size = 8, caption = "Depression")
 ```
 
 ## Depression
@@ -136,7 +135,7 @@ levels(df$sad) <- c("Low Depression", "High Depression")
 # Depression comparison
 compareGroups(data = df, sad ~ gend + race + adm_reason) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Depression scoring")
+  export2md(., format = "latex", size = 8, caption = "Depression scoring")
 ```
 
 ## Coronary artery disease
@@ -159,7 +158,7 @@ df$race <- df_txt$race
 # CAD scoring systems
 compareGroups(data = df, ~ cass50 + cass70 + gensini + stenosis) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "CAD Severity Scores")
+  export2md(., format = "latex", size = 8, caption = "CAD Severity Scores")
 ```
 
 ## Heart rate variability
@@ -181,37 +180,38 @@ df <- hrv_params
 # HRV quality
 compareGroups(data = df, ~ Duration + PercentNotAnalyzed + PercentLowQualityWind) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "HRV quality")
+  export2md(., format = "latex", size = 8, caption = "HRV quality")
 ```
 
 ### Overview of all HRV measures {.allowframebreaks}
 
 ```{r, descriptive HRV}
-df <- hrv_proc
+df <- hrv_proc %>% na.omit()
 
 # Time domain
 compareGroups(data = df, ~ BPM + SDNN + RMSSD + PNN50) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Time Domain")
+  export2md(., format = "latex", size = 8, caption = "Time Domain")
 
 # Frequency domain
 compareGroups(data = df, ~ HF + LF + VLF + ULF + TP + LFHF) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Frequency Domain")
+  export2md(., format = "latex", size = 8, caption = "Frequency Domain")
 
 # Other measures
 compareGroups(data = df, ~ AC + DC + SampEn + ApEn) %>%
   createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "markdown", caption = "Additional Measures")
+  export2md(., format = "latex", size = 8, caption = "Additional Measures")
 ```
 
 ```{r HRV graphs}
 df <- hrv_long
+month(df$clock) <- month(today())
+day(df$clock) <- day(today())
 
 # Visualize
-ggplot(df, aes(x = clock, y = values, color = hrv)) +
+ggplot(df, aes(x = clock, y = value, color = hrv)) +
   geom_smooth(se = TRUE) +
-  geom_ribbon(aes(ymin = ymin, ymax = ymax)) +
   scale_x_datetime(date_breaks = "4 hours", date_labels = "%H") +
   facet_wrap(~hrv, scales = "free_y") +
   scale_color_viridis_d() +
@@ -231,7 +231,7 @@ df <- na.omit(df)
 # Visualizing all the data will be expensive
 # Even reducing to just a few patients may be exhaustingly slow
 gTimeHRV <-
-  ggplot(subset(df, patid %in% c("06931", "06955", "07027", "07052", "06944")), aes(x = clock, y = values)) +
+  ggplot(df, aes(x = clock, y = values)) +
   facet_wrap(~ hrv, ncol = 2) +
   stat_summary(aes(group = hrv, y = values), fun.data = "mean_cl_normal", geom = "ribbon", alpha = 1 / 5) +
   stat_summary(aes(group = hrv, colour = hrv, y = values), fun.y = mean, geom = "line") +
@@ -251,25 +251,17 @@ gTimeHRV <-
 
 # Aim 1: Relationship between Depression and ANS Dysfunction
 
-```{r exploring depression and HRV}
-df <- inner_join(psych[c("patid", "sad")], hrv_proc, by = "patid")
+### Differences in population
+        
+```{r basic stats for depression}
+df <- inner_join(psych[c("patid", "sad", "phq")], hrv_first_hour, by = "patid")
 
-# Distribution of sadness
-ks.test(df$HF[df$sad == 1], df$HF[df$sad == 0])
-ks.test(df$LF[df$sad == 1], df$LF[df$sad == 0])
-ks.test(df$VLF[df$sad == 1], df$VLF[df$sad == 0])
-ks.test(df$ULF[df$sad == 1], df$ULF[df$sad == 0])
-ks.test(df$TP[df$sad == 1], df$TP[df$sad == 0])
-ks.test(df$LFHF[df$sad == 1], df$LFHF[df$sad == 0])
-ks.test(df$AC[df$sad == 1], df$AC[df$sad == 0])
-ks.test(df$DC[df$sad == 1], df$DC[df$sad == 0])
-ks.test(df$LF[df$sad == 1], df$LF[df$sad == 0])
-ks.test(df$SampEn[df$sad == 1], df$SampEn[df$sad == 0])
-ks.test(df$ApEn[df$sad == 1], df$ApEn[df$sad == 0])
-ks.test(df$BPM[df$sad == 1], df$BPM[df$sad == 0])
+# Comparison of "best" HRV measures
+compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + NN) %>%
+  createTable(.)
 ```
 
-
+### Hourly differences
 
 ```{r circadian depression and T-test}
 # Df for visualization
@@ -282,65 +274,65 @@ df <-
   dplyr::summarise(mean = mean(value), n = length(value), sd = sd(value), se = sd(value) / sqrt(length(value)))
 
 # Have P values for significant differences handy (not currently working)
-overall_t <-
-  inner_join(subset(psych, !is.na(sad)), hrv_blocks, by = "patid") %>%
-  na.omit() %>%
-  do(
-    NN = t.test(NN ~ sad, data = .)$p.value,
-    SDNN = t.test(SDNN ~ sad, data = .)$p.value,
-    RMSSD = t.test(RMSSD ~ sad, data = .)$p.value,
-    PNN50 = t.test(PNN50 ~ sad, data = .)$p.value,
-    ULF = t.test(ULF ~ sad, data = .)$p.value,
-    VLF = t.test(VLF ~ sad, data = .)$p.value,
-    LF = t.test(LF ~ sad, data = .)$p.value,
-    HF = t.test(HF ~ sad, data = .)$p.value,
-    LFHF = t.test(LFHF ~ sad, data = .)$p.value,
-    TP = t.test(TP ~ sad, data = .)$p.value,
-    AC = t.test(AC ~ sad, data = .)$p.value,
-    DC = t.test(DC ~ sad, data = .)$p.value,
-    SampEn = t.test(SampEn ~ sad, data = .)$p.value,
-    ApEn = t.test(ApEn ~ sad, data = .)$p.value,
-  )
-  gather(variable, value, -hour)
-hourly_t$value <- as.numeric(hourly_t$value)
-
-# Visualization of data faceted by HRV and grouped by ischemia
-gCircadianSadness <-
-  ggplot(df, aes(x = factor(hour), colour = sad)) +
-  facet_wrap(~ hrv, scales = "free_y") +
-  geom_point(aes(y = mean), size = 2, position = position_dodge(.3)) +
-  scale_shape_manual(values = c(1, 16)) +
-  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, position = position_dodge(.3))
-  theme(panel.border = element_rect(colour = "black", fill = NA)) +
-  labs(
-    title = "Hourly HRV in those with depression",
-    x = "Time in Hours",
-    y = "Normalized HRV [SEM]",
-    colour = "Depression",
-  ) +
-  scale_color_viridis(option = "cividis", discrete = TRUE, begin = .1, end = .9) +
-  theme_minimal() +
-  theme(
-    plot.caption = element_text(hjust = 0),
-    legend.position = "bottom",
-    legend.box = "horizontal"
-  )
-
-# Plot this
-gDiurnal
-
+#overall_t <-
+#  inner_join(subset(psych, !is.na(sad)), hrv_blocks, by = "patid") %>%
+#  na.omit() %>%
+#  do(
+#    NN = t.test(NN ~ sad, data = .)$p.value,
+#    SDNN = t.test(SDNN ~ sad, data = .)$p.value,
+#    RMSSD = t.test(RMSSD ~ sad, data = .)$p.value,
+#    PNN50 = t.test(PNN50 ~ sad, data = .)$p.value,
+#    ULF = t.test(ULF ~ sad, data = .)$p.value,
+#    VLF = t.test(VLF ~ sad, data = .)$p.value,
+#    LF = t.test(LF ~ sad, data = .)$p.value,
+#    HF = t.test(HF ~ sad, data = .)$p.value,
+#    LFHF = t.test(LFHF ~ sad, data = .)$p.value,
+#    TP = t.test(TP ~ sad, data = .)$p.value,
+#    AC = t.test(AC ~ sad, data = .)$p.value,
+#    DC = t.test(DC ~ sad, data = .)$p.value,
+#    SampEn = t.test(SampEn ~ sad, data = .)$p.value,
+#    ApEn = t.test(ApEn ~ sad, data = .)$p.value,
+#  )
+#  gather(variable, value, -hour)
+#hourly_t$value <- as.numeric(hourly_t$value)
+#
+## Visualization of data faceted by HRV and grouped by ischemia
+#gCircadianSadness <-
+#  ggplot(df, aes(x = factor(hour), colour = sad)) +
+#  facet_wrap(~ hrv, scales = "free_y") +
+#  geom_point(aes(y = mean), size = 2, position = position_dodge(.3)) +
+#  scale_shape_manual(values = c(1, 16)) +
+#  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, position = position_dodge(.3))
+#  theme(panel.border = element_rect(colour = "black", fill = NA)) +
+#  labs(
+#    title = "Hourly HRV in those with depression",
+#    x = "Time in Hours",
+#    y = "Normalized HRV [SEM]",
+#    colour = "Depression",
+#  ) +
+#  scale_color_viridis(option = "cividis", discrete = TRUE, begin = .1, end = .9) +
+#  theme_minimal() +
+#  theme(
+#    plot.caption = element_text(hjust = 0),
+#    legend.position = "bottom",
+#    legend.box = "horizontal"
+#  )
 ```
 
 ### Visualizing Differences in HRV by Depresion
+
 ```{r HRV x depression plot}
 df <- 
   inner_join(hrv_proc, psych[c("patid", "sad")], by = "patid") %>%
-  pivot_longer(., names_to = "hrv", values_to = "values", values_drop_na = TRUE, -c(patid, index, clock, hour, sad)) %>%
+  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, sad)) %>%
   na.omit()
 
+month(df$clock) <- month(today())
+day(df$clock) <- day(today())
+
 # Visualize
-ggplot(df, aes(x = clock, y = values, group = factor(sad), color = factor(sad))) + 
-  geom_smooth(na.rm = TRUE) +
+ggplot(df, aes(x = clock, y = value, group = factor(sad), color = factor(sad))) + 
+  geom_smooth() + 
   scale_x_datetime(date_breaks = "4 hours", date_labels = "%H") +
   facet_wrap(~hrv, scales = "free_y") +
   scale_color_viridis_d(option = "E") +
@@ -353,39 +345,67 @@ ggplot(df, aes(x = clock, y = values, group = factor(sad), color = factor(sad)))
   )
 ```
 
-# Aim 2: Relationship between CAD and ANS Dysfunction
-
-### Differences in HRV distribution by CAD
+### Measures of association
 
 ```{r}
-df <- inner_join(angio_scores[c("patid", "stenosis")], hrv_proc, by = "patid")
+df <- 
+  pivot_longer(hrv_first_hour, names_to = "hrv", values_to = "value", -c(patid, hour, index, clock)) %>%
+  inner_join(psych, ., by = "patid")
 
-ks.test(df$HF[df$stenosis == 1], df$HF[df$stenosis == 0])
-ks.test(df$LF[df$stenosis == 1], df$LF[df$stenosis == 0])
-ks.test(df$VLF[df$stenosis == 1], df$VLF[df$stenosis == 0])
-ks.test(df$ULF[df$stenosis == 1], df$ULF[df$stenosis == 0])
-ks.test(df$TP[df$stenosis == 1], df$TP[df$stenosis == 0])
-ks.test(df$LFHF[df$stenosis == 1], df$LFHF[df$stenosis == 0])
-ks.test(df$AC[df$stenosis == 1], df$AC[df$stenosis == 0])
-ks.test(df$DC[df$stenosis == 1], df$DC[df$stenosis == 0])
-ks.test(df$LF[df$stenosis == 1], df$LF[df$stenosis == 0])
-ks.test(df$SampEn[df$stenosis == 1], df$SampEn[df$stenosis == 0])
-ks.test(df$ApEn[df$stenosis == 1], df$ApEn[df$stenosis == 0])
-ks.test(df$BPM[df$stenosis == 1], df$BPM[df$stenosis == 0])
+# Visualize "first hour" data
+ggplot(df, aes(x = phq, y = value, color = hrv)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~hrv, scales = "free_y") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    title = "First hour of HRV (before cath) and depression",
+    x = "PHQ score",
+    y = "HRV"
+  )
 ```
 
 
-### Visualizing Differences in HRV by CAD
-```{r HRV x CAD plot}
+# Aim 2: Relationship between CAD and ANS Dysfunction
 
-df <- 
-  inner_join(hrv_proc, angio_scores[c("patid", "stenosis")], by = "patid") %>%
-  pivot_longer(., names_to = "hrv", values_to = "values", values_drop_na = TRUE, -c(patid, index, clock, hour, stenosis)) %>% 
-  na.omit() %>%
-  subset(., hrv %in% c("AC", "DC", "BPM", "HF", "LF", "TP", "LFHF", "PNN50", "VLF"))
+### Differences in population
+
+```{r basic stats for CAD}
+df <- inner_join(angio_scores, hrv_blocks, by = "patid")
+df$cad1 <- ifelse(df$cass50 > 1, 1, 0)
+df$cad2 <- ifelse(df$cass50 > 2, 1, 0)
+df$cad3 <- ifelse(df$cass50 > 3, 1, 0)
+df$cad4 <- ifelse(df$cass70 > 1, 1, 0)
+df$cad5 <- ifelse(df$cass70 > 2, 1, 0)
+df$cad6 <- ifelse(df$cass70 > 3, 1, 0)
+
+# Comparison of "best" HRV measures at first hour
+# Candidate measures = RMSSD, PNN50, AC .... ULF, LFHF, DC, SDNN
+# Cass50 = ...
+# Cass70 > 1 =  AC, DC, SampEn
+subset(df, hour == 10) %>%
+  compareGroups(data = ., cad4 ~ HF + LF + VLF + ULF + TP + LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn) %>%
+  createTable(.)
+
+# At 10 AM... >70% CAD = HF, TP, SDNN, RMSSD, PNN50, AC, DC, ApEn
+```
+
+### Visualizing Differences in HRV by CAD
+
+```{r HRV x CAD plot}
+df <- inner_join(hrv_proc, angio_scores[c("patid", "stenosis", "cass50")], by = "patid")
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
+
+df %<>%
+  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, stenosis, cad, cass50)) %>% 
+  na.omit()
+
+month(df$clock) <- month(today())
+day(df$clock) <- day(today())
 
 # Visualize
-ggplot(df, aes(x = clock, y = values, group = factor(stenosis), color = factor(stenosis))) + 
+ggplot(df, aes(x = clock, y = value, group = factor(cad), color = factor(cad))) + 
   geom_smooth(na.rm = TRUE) +
   scale_x_datetime(date_breaks = "4 hours", date_labels = "%H") +
   facet_wrap(~hrv, scales = "free_y") +
@@ -393,45 +413,51 @@ ggplot(df, aes(x = clock, y = values, group = factor(stenosis), color = factor(s
   theme_minimal() +
   theme(legend.position = "none") + 
   labs(
-    title = "HRV by Stenosis (+ = yellow)",
+    title = "HRV by CASS50 (if >1 = yellow)",
     x = "Time (hour of day)",
     y = "HRV"
   )
 ```
 
+### Hourly differences {.allowframebreaks}
+
 ```{r, circadian CAD}
 # Df for visualization
-df <-
+tmp <- angio_scores
+tmp$cad <- ifelse(tmp$cass50 > 1, 1, 0)
+
+df <- 
   hrv_blocks %>%
   pivot_longer(., names_to = "hrv", values_to = "value", -c(patid, hour)) %>%
-  inner_join(angio_scores[c("patid", "stenosis")], ., by = "patid") %>%
+  inner_join(tmp[c("patid", "cad")], ., by = "patid") %>%
   na.omit() %>%
-  group_by(stenosis, hour, hrv) %>%
+  group_by(hour, hrv, cad) %>%
   dplyr::summarise(mean = mean(value), n = length(value), sd = sd(value), se = sd(value) / sqrt(length(value)))
 
-# Have P values for significant differences handy (not currently working)
-hourly_t <-
-  inner_join(subset(angio_scores, !is.na(stenosis)), hrv_blocks, by = "patid") %>%
-  group_by(hour) %>%
+
+df <- 
+  inner_join(tmp, hrv_blocks, by = "patid") %>%
   na.omit() %>%
+  group_by(hour) %>%
   do(
-    NN = t.test(NN ~ stenosis, data = .)$p.value,
-    SDNN = t.test(SDNN ~ stenosis, data = .)$p.value,
-    RMSSD = t.test(RMSSD ~ stenosis, data = .)$p.value,
-    PNN50 = t.test(PNN50 ~ stenosis, data = .)$p.value,
-    ULF = t.test(ULF ~ stenosis, data = .)$p.value,
-    VLF = t.test(VLF ~ stenosis, data = .)$p.value,
-    LF = t.test(LF ~ stenosis, data = .)$p.value,
-    HF = t.test(HF ~ stenosis, data = .)$p.value,
-    LFHF = t.test(LFHF ~ stenosis, data = .)$p.value,
-    TP = t.test(TP ~ stenosis, data = .)$p.value,
-    AC = t.test(AC ~ stenosis, data = .)$p.value,
-    DC = t.test(DC ~ stenosis, data = .)$p.value,
-    SampEn = t.test(SampEn ~ stenosis, data = .)$p.value,
-    ApEn = t.test(ApEn ~ stenosis, data = .)$p.value,
-  )
+    NN = tidy(t.test(NN ~ cad, data = .)),
+    SDNN = tidy(t.test(SDNN ~ cad, data = .)),
+    RMSSD = tidy(t.test(RMSSD ~ cad, data = .)),
+    PNN50 = tidy(t.test(PNN50 ~ cad, data = .)),
+    ULF = tidy(t.test(ULF ~ cad, data = .)),
+#    VLF = tidy(t.test(VLF ~ cad, data = .)),
+#    LF = tidy(t.test(LF ~ cad, data = .)),
+#    HF = tidy(t.test(HF ~ cad, data = .)),
+    LFHF = tidy(t.test(LFHF ~ cad, data = .)),
+#    TP = tidy(t.test(TP ~ cad, data = .)),
+    AC = tidy(t.test(AC ~ cad, data = .)),
+    DC = tidy(t.test(DC ~ cad, data = .)),
+    SampEn = tidy(t.test(SampEn ~ cad, data = .)),
+    ApEn = tidy(t.test(ApEn ~ cad, data = .))
+    )
 
 # Visualization of data faceted by HRV and grouped by ischemia
+tmp <-
   ggplot(df, aes(x = factor(hour), colour = stenosis)) +
   facet_wrap(~ hrv, scales = "free_y") +
   geom_point(aes(y = mean), size = 2, position = position_dodge(.3)) +
@@ -446,4 +472,40 @@ hourly_t <-
   ) +
   scale_color_viridis(option = "cividis", discrete = TRUE, begin = .1, end = .9) +
   theme_minimal()
+```
+
+```{r}
+df <- inner_join(hrv_blocks, angio_scores, by = "patid")
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
+
+```
+
+### Measing association
+
+```{r}
+df <- 
+  pivot_longer(hrv_proc, names_to = "hrv", values_to = "value", -c(patid, index, index, clock)) %>%
+  inner_join(angio_scores, ., by = "patid") %>%
+  na.omit()
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
+
+# Visualize "first hour" data
+ggplot(df, aes(x = value, y = cad, color = hrv)) +
+  geom_point() +
+  geom_smooth(method = "glm", method.args = list(family = "binomial")) +
+  facet_wrap(~hrv, scales = "free_x") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Does HRV Classify patients with CAD?",
+    x = "HRV",
+    y = "CAD"
+  )
+
+# REgrsssions
+df <- inner_join(hrv_proc, angio_scores, by = "patid") %>% na.omit()
+df$cad <- ifelse(df$cass50 > 1, 1, 0)
+df$hour <- hour(df$clock)
+
+glm(cad ~ LF*hour, family = "binomial", data = df) %>% summary()
 ```

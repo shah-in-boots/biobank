@@ -1,6 +1,4 @@
-% Analyze HRV for each patient that gave raw data
-% Summary function for analylzing HRV data en masse
-% Uses HRV toolbox heavily
+% Extract RR intervals for each patient
 
 %% Set up environment
 
@@ -19,13 +17,6 @@ proc_folder = [pwd filesep 'proc_data'];
 
 % Identify all VivaLNK files
 files = dir(fullfile(raw_folder, '*.txt'));
-%patients = regexprep({files.name}, '.txt', '');
-%numsub = length(patients);
-
-% Restrict to just new, unprocessed data
-log = readtable([raw_folder filesep 'patient_log.xlsx']);
-patients = log.ID(log.Status == "processed")';
-numsub = length(patients);
 
 %% Parallel for loop for analysis
 
@@ -60,34 +51,10 @@ parfor i = 1:numsub
   ecg = raw_ecg.ecg;
   t = load([proc_folder filesep name filesep name '_ecg.mat'], 't');
 
-  % Graph ECG signal into MATLAB file for visualization of errors/quality
-
-  % Create time vector for visualizing data
-  %Fs = HRVparams.Fs;
-  %tm = 0:1/Fs:(length(ecg)-1)/Fs;
-  % plot the signal
-  %figure(1);
-  %plot(tm,ecg);
-  %xlabel('[s]');
-  %ylabel('[mV]');
-
-  % call the function that perform peak detection
-  % added a multiplier of a 1000 to get a detection of value
-  %r_peaks = jqrs(ecg,HRVparams);
-
-  % plot the detected r_peaks on the top of the ecg signal
-  %figure(1);
-  %hold on;
-  %plot(r_peaks./Fs, ecg(r_peaks),'o');
-  %legend('ecg signal', 'detected R peaks');
-
-  % Save file
-  %saveas(figure(1), [proc_folder filesep name filesep name '.fig']);
-
-  % Run the HRV analysis
-  [results, resFilenameHRV] = ...
-      Main_HRV_Analysis(ecg, [], 'ECGWaveform', HRVparams, name);
-  
+  % Extract RR intervals for each patien
+  [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ...
+  	ConvertRawDataToRRIntervals(ecg, HRVparams, name);
+S
   % STop time
   toc
   fprintf('HRV analysis done for %s.\n', name);
