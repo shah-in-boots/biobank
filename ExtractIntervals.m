@@ -23,6 +23,7 @@ files = dir(fullfile(raw_folder, '*.txt'));
 patients = regexprep({files.name}, '.txt', '');
 numsub = length(patients);
 
+
 %% Parallel for loop for analysis
 
 % Loop, timed with tic toc
@@ -37,7 +38,7 @@ parfor i = 1:numsub
 
   % VivaLNK parser to run and make .mat files for ECG and ACC data
   % Move this into output folder
-  VivaLNK_parser_beta(raw_folder, patients{i});
+  VivaLNK_parser_beta(raw_folder, name);
   movefile([raw_folder filesep name '*.mat'], [proc_folder filesep name]);
   toc
   fprintf('Vivalnk processing completed for %s.\n', name);
