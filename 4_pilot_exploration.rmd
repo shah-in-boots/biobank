@@ -109,7 +109,7 @@ df$setting <- df_txt$setting
 
 
 # Table 1
-compareGroups(setting ~ gend + race + blbmi + adm_reason, data = df) %>%
+compareGroups(~ gend + race + blbmi + adm_reason + setting + age, data = df) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
   export2md(., format = "latex", size = 8, caption = "Depression")
 ```
@@ -252,7 +252,7 @@ gTimeHRV <-
 # Aim 1: Relationship between Depression and ANS Dysfunction
 
 ### Differences in population
-
+        
 ```{r basic stats for depression}
 df <- inner_join(psych[c("patid", "sad", "phq")], hrv_first_hour, by = "patid")
 

@@ -19,8 +19,6 @@ psych
 Matrix
 lme4
 nlme
-SparseM
-rms
 boot
 tables
 haplo.stats
