@@ -38,7 +38,7 @@ parfor i = 1:numsub
 
   % VivaLNK parser to run and make .mat files for ECG and ACC data
   % Move this into output folder
-  VivaLNK_parser_beta(raw_folder, name);
+  VivaLNK_parser_beta(raw_folder, patients{i});
   movefile([raw_folder filesep name '*.mat'], [proc_folder filesep name]);
   toc
   fprintf('Vivalnk processing completed for %s.\n', name);
