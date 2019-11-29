@@ -18,6 +18,11 @@ proc_folder = [pwd filesep 'proc_data'];
 % Identify all VivaLNK files
 files = dir(fullfile(raw_folder, '*.txt'));
 
+% Identify all VivaLNK files
+files = dir(fullfile(raw_folder, '*.txt'));
+patients = regexprep({files.name}, '.txt', '');
+numsub = length(patients);
+
 %% Parallel for loop for analysis
 
 % Loop, timed with tic toc
@@ -54,6 +59,10 @@ parfor i = 1:numsub
   % Extract RR intervals for each patien
   [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ...
   	ConvertRawDataToRRIntervals(ecg, HRVparams, name);
+
+  % Save the RR table
+  ints = [t_RR(:), rr(:)];
+  writematrix(ints, [proc_folder filesep name filesep name '_rr.csv']);
 
   % STop time
   toc
