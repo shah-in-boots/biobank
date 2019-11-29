@@ -54,7 +54,7 @@ parfor i = 1:numsub
   % Extract RR intervals for each patien
   [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ...
   	ConvertRawDataToRRIntervals(ecg, HRVparams, name);
-S
+
   % STop time
   toc
   fprintf('HRV analysis done for %s.\n', name);
