@@ -63,8 +63,9 @@ parfor i = 1:numsub
   [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ecg, HRVparams, name);
 
   % Save the RR table
-  ints = [t_RR(:), rr(:)];
-  writematrix(ints, [proc_folder filesep name filesep name '_rr.csv']);
+  m = [t_RR(:), rr(:)];
+  T = array2table(m, 'VariableNames',{'time','rr'});
+  writetable(m, [proc_folder filesep name filesep name '_rr.csv']);
 
   % Stop time
   toc
