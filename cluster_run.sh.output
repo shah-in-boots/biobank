@@ -31,3 +31,256 @@ details about specifying time zones.]
   In parallel_function (line 433)
   In AnalyzeHRV (line 34)] 
 connected to 12 workers.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 44.361045 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 47.225618 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 47.019601 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 63.979078 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 69.296094 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 88.726420 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 91.860926 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 105.360799 seconds.
+Elapsed time is 47.411480 seconds.
+Vivalnk processing completed for 07011.
+HRV Analysis completed for subject ID 07011 
+Elapsed time is 117.519313 seconds.
+HRV analysis done for 07011.
+Elapsed time is 44.715627 seconds.
+Vivalnk processing completed for 07004.
+HRV Analysis completed for subject ID 07004 
+Elapsed time is 47.611828 seconds.
+Vivalnk processing completed for 07005.
+HRV Analysis completed for subject ID 07005 
+Elapsed time is 172.728021 seconds.
+HRV analysis done for 07005.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 182.424759 seconds.
+Elapsed time is 183.859895 seconds.
+Elapsed time is 69.836077 seconds.
+Vivalnk processing completed for 06984.
+HRV Analysis completed for subject ID 06984 
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 197.888427 seconds.
+Elapsed time is 199.243754 seconds.
+Elapsed time is 64.455797 seconds.
+Vivalnk processing completed for 06965.
+HRV Analysis completed for subject ID 06965 
+Elapsed time is 158.116337 seconds.
+HRV analysis done for 07004.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 71.467644 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 108.350084 seconds.
+Elapsed time is 92.562422 seconds.
+Vivalnk processing completed for 06989.
+HRV Analysis completed for subject ID 06989 
+Elapsed time is 106.203208 seconds.
+Vivalnk processing completed for 06954.
+HRV Analysis completed for subject ID 06954 
+Elapsed time is 89.424082 seconds.
+Vivalnk processing completed for 06928.
+HRV Analysis completed for subject ID 06928 
+Elapsed time is 299.790303 seconds.
+HRV analysis done for 06989.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 68.460049 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 431.901162 seconds.
+Elapsed time is 434.855007 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 453.200143 seconds.
+Elapsed time is 456.308253 seconds.
+Elapsed time is 72.040992 seconds.
+Vivalnk processing completed for 06994.
+HRV Analysis completed for subject ID 06994 
+Elapsed time is 302.474074 seconds.
+HRV analysis done for 06994.
+Elapsed time is 68.993693 seconds.
+Vivalnk processing completed for 06988.
+HRV Analysis completed for subject ID 06988 
+Elapsed time is 179.714651 seconds.
+HRV analysis done for 06988.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 404.569236 seconds.
+Elapsed time is 407.626878 seconds.
+Vivalnk processing completed for 06931.
+HRV Analysis completed for subject ID 06931 
+Elapsed time is 109.188428 seconds.
+Vivalnk processing completed for 07032.
+HRV Analysis completed for subject ID 07032 
+Elapsed time is 380.746930 seconds.
+HRV analysis done for 07032.
+Elapsed time is 196.511055 seconds.
+HRV analysis done for 06984.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 419.057617 seconds.
+Elapsed time is 422.144771 seconds.
+Elapsed time is 204.458200 seconds.
+HRV analysis done for 06965.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 451.594295 seconds.
+Elapsed time is 454.989400 seconds.
+Elapsed time is 331.879800 seconds.
+HRV analysis done for 06928.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 355.570663 seconds.
+Elapsed time is 358.289107 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 141.849286 seconds.
+Elapsed time is 142.905718 seconds.
+Elapsed time is 326.861221 seconds.
+HRV analysis done for 06954.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 463.123012 seconds.
+Elapsed time is 466.709649 seconds.
+Vivalnk processing completed for 07014.
+HRV Analysis completed for subject ID 07014 
+Elapsed time is 812.129838 seconds.
+HRV analysis done for 07014.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 391.173426 seconds.
+Elapsed time is 394.188962 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 378.750355 seconds.
+Elapsed time is 381.455808 seconds.
+Elapsed time is 545.492621 seconds.
+HRV analysis done for 06931.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 439.439333 seconds.
+Elapsed time is 442.852172 seconds.
+Vivalnk processing completed for 07045.
+HRV Analysis completed for subject ID 07045 
+Elapsed time is 503.475448 seconds.
+HRV analysis done for 07045.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 69.305219 seconds.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 442.614175 seconds.
+Elapsed time is 445.968378 seconds.
+Elapsed time is 69.838969 seconds.
+Vivalnk processing completed for 07053.
+HRV Analysis completed for subject ID 07053 
+Elapsed time is 214.862107 seconds.
+HRV analysis done for 07053.
+Vivalnk processing completed for 07020.
+HRV Analysis completed for subject ID 07020 
+Elapsed time is 1348.964074 seconds.
+HRV analysis done for 07020.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 102.443192 seconds.
+Vivalnk processing completed for 07027.
+HRV Analysis completed for subject ID 07027 
+Elapsed time is 1342.588771 seconds.
+HRV analysis done for 07027.
+Vivalnk processing completed for 06983.
+HRV Analysis completed for subject ID 06983 
+Elapsed time is 1383.498561 seconds.
+HRV analysis done for 06983.
+Elapsed time is 103.103519 seconds.
+Vivalnk processing completed for 07063.
+HRV Analysis completed for subject ID 07063 
+Elapsed time is 308.717375 seconds.
+HRV analysis done for 07063.
+Vivalnk processing completed for 07037.
+HRV Analysis completed for subject ID 07037 
+Elapsed time is 1189.282804 seconds.
+HRV analysis done for 07037.
+Vivalnk processing completed for 07036.
+HRV Analysis completed for subject ID 07036 
+Elapsed time is 1324.998157 seconds.
+HRV analysis done for 07036.
+Vivalnk processing completed for 06978.
+HRV Analysis completed for subject ID 06978 
+Vivalnk processing completed for 06925.
+HRV Analysis completed for subject ID 06925 
+Elapsed time is 1510.210099 seconds.
+HRV analysis done for 06925.
+Vivalnk processing completed for 06944.
+HRV Analysis completed for subject ID 06944 
+Elapsed time is 1570.680639 seconds.
+HRV analysis done for 06944.
+Elapsed time is 1836.830502 seconds.
+HRV analysis done for 06978.
+Warning: Directory already exists.
+  In parallel_function>make_general_channel/channel_general (line 929)
+  In remoteParallelFunction (line 38)
+Elapsed time is 95.940582 seconds.
+Vivalnk processing completed for 06955.
+HRV Analysis completed for subject ID 06955 
+Elapsed time is 1728.877064 seconds.
+HRV analysis done for 06955.
+Vivalnk processing completed for UI7616.
+HRV Analysis completed for subject ID UI7616 
+Elapsed time is 1565.384454 seconds.
+HRV analysis done for UI7616.
+Vivalnk processing completed for 07052.
+HRV Analysis completed for subject ID 07052 
+Elapsed time is 1303.284825 seconds.
+HRV analysis done for 07052.
+Elapsed time is 96.615987 seconds.
+Vivalnk processing completed for 06977.
+HRV Analysis completed for subject ID 06977 
+Elapsed time is 366.147865 seconds.
+HRV analysis done for 06977.
+Total Run Time...Elapsed time is 2224.043493 seconds.
