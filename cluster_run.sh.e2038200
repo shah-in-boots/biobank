@@ -1,0 +1,6 @@
+{Error using VivaLNK_parser_beta (line 47)
+Invalid file identifier. Use fopen to generate a valid file identifier.
+
+Error in AnalyzeHRV (line 34)
+parfor i = 1:numsub
+} 
