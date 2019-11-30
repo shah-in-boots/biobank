@@ -23,12 +23,11 @@ files = dir(fullfile(raw_folder, '*.txt'));
 patients = regexprep({files.name}, '.txt', '');
 numsub = length(patients);
 
-
 %% Parallel for loop for analysis
 
 % Loop, timed with tic toc
 tic
-parfor i = 1:numsub
+for i = 1:numsub
   % Time it
   tic
 
@@ -38,7 +37,7 @@ parfor i = 1:numsub
 
   % VivaLNK parser to run and make .mat files for ECG and ACC data
   % Move this into output folder
-  VivaLNK_parser_beta(raw_folder, name);
+  VivaLNK_parser_beta(raw_folder, patients{i});
   movefile([raw_folder filesep name '*.mat'], [proc_folder filesep name]);
   toc
   fprintf('Vivalnk processing completed for %s.\n', name);
@@ -58,14 +57,13 @@ parfor i = 1:numsub
   t = load([proc_folder filesep name filesep name '_ecg.mat'], 't');
 
   % Extract RR intervals for each patien
-  [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ...
-  	ConvertRawDataToRRIntervals(ecg, HRVparams, name);
+  [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ecg, HRVparams, name);
 
   % Save the RR table
   ints = [t_RR(:), rr(:)];
   writematrix(ints, [proc_folder filesep name filesep name '_rr.csv']);
 
-  % STop time
+  % Stop time
   toc
   fprintf('HRV analysis done for %s.\n', name);
 
