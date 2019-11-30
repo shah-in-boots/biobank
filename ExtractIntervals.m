@@ -27,7 +27,7 @@ numsub = length(patients);
 
 % Loop, timed with tic toc
 tic
-for i = 1:numsub
+parfor i = 1:numsub
   % Time it
   tic
 

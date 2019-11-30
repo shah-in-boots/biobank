@@ -3,5 +3,5 @@
 #$ -cwd -V
 
 # Matlab script
-matlab -nodisplay -r AnalyzeHRV
+matlab -nodisplay -r ExtractIntervals > cluster.log
 
