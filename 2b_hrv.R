@@ -85,6 +85,27 @@ rm(df_hrv, df_param)
 
 # }}}
 
+## DYX data {{{ ====
+
+# Data intake
+df <- read_xlsx(file.path(getwd(), 'HeartTrends', 'dyx_data.xlsx'), col_names = TRUE) %>% na.omit()
+
+# Relevant columns
+svar <- c("File Name", "Patient ID", "Final Dyx")
+df <- df[svar]
+names(df) <- c("idxhour", "patid", "DYX")
+
+# This data frame still has the hours misaligned, will need to reorganize
+# Also trim the name
+df <- separate(data = df, col = patid, sep = "_", into = c("patid", NA))
+df <- inner_join(df, hrv_params[c("patid", "Start")], by = "patid")
+df$hour <- df$idxhour - 1 + hour(df$Start)
+df$hour[df$hour > 23] <- df$hour[df$hour > 23] - 24
+
+# FInal form
+hrv_dyx <- df[c("patid", "hour", "DYX")]
+
+#}}}
 
 ## Troubleshooting problem MRNs {{{ ====
 

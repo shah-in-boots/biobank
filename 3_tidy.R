@@ -249,8 +249,8 @@ hrv_blocks <- df %>%
     AC = mean(AC, na.rm = TRUE),
     DC = mean(DC, na.rm = TRUE),
     SampEn = mean(SampEn, na.rm = TRUE),
-    ApEn = mean(ApEn, na.rm = TRUE)
-  )
+   ApEn = mean(ApEn, na.rm = TRUE)
+  ) %>% left_join(., hrv_dyx, by = c("patid", "hour"))
 
 # Can restrict it to good quality data
 df <- left_join(hrv_blocks, hrv_quality, by = c("patid", "hour"))

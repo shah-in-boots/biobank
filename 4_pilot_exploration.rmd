@@ -257,7 +257,7 @@ gTimeHRV <-
 df <- inner_join(psych[c("patid", "sad", "phq")], hrv_first_hour, by = "patid")
 
 # Comparison of "best" HRV measures
-compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + NN) %>%
+compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + DYX + NN) %>%
   createTable(.)
 ```
 
@@ -319,7 +319,7 @@ df <-
 #  )
 ```
 
-### Visualizing Differences in HRV by Depresion
+### Visualizing Differences in HRV by Depression
 
 ```{r HRV x depression plot}
 df <- 
@@ -373,19 +373,19 @@ ggplot(df, aes(x = phq, y = value, color = hrv)) +
 
 ```{r basic stats for CAD}
 df <- inner_join(angio_scores, hrv_blocks, by = "patid")
-df$cad1 <- ifelse(df$cass50 > 1, 1, 0)
-df$cad2 <- ifelse(df$cass50 > 2, 1, 0)
-df$cad3 <- ifelse(df$cass50 > 3, 1, 0)
-df$cad4 <- ifelse(df$cass70 > 1, 1, 0)
-df$cad5 <- ifelse(df$cass70 > 2, 1, 0)
-df$cad6 <- ifelse(df$cass70 > 3, 1, 0)
+df$cad1 <- ifelse(df$cass50 >= 1, 1, 0)
+df$cad2 <- ifelse(df$cass50 >= 2, 1, 0)
+df$cad3 <- ifelse(df$cass50 >= 3, 1, 0)
+df$cad4 <- ifelse(df$cass70 >= 1, 1, 0)
+df$cad5 <- ifelse(df$cass70 >= 2, 1, 0)
+df$cad6 <- ifelse(df$cass70 >= 3, 1, 0)
 
 # Comparison of "best" HRV measures at first hour
 # Candidate measures = RMSSD, PNN50, AC .... ULF, LFHF, DC, SDNN
 # Cass50 = ...
 # Cass70 > 1 =  AC, DC, SampEn
-subset(df, hour == 10) %>%
-  compareGroups(data = ., cad4 ~ HF + LF + VLF + ULF + TP + LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn) %>%
+subset(df, hour == 11) %>%
+  compareGroups(data = ., cad4 ~ LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn + DYX) %>%
   createTable(.)
 
 # At 10 AM... >70% CAD = HF, TP, SDNN, RMSSD, PNN50, AC, DC, ApEn
@@ -453,7 +453,8 @@ df <-
     AC = tidy(t.test(AC ~ cad, data = .)),
     DC = tidy(t.test(DC ~ cad, data = .)),
     SampEn = tidy(t.test(SampEn ~ cad, data = .)),
-    ApEn = tidy(t.test(ApEn ~ cad, data = .))
+    ApEn = tidy(t.test(ApEn ~ cad, data = .)),
+    DYX = tidy(t.test(DYX ~ cad, data = .))
     )
 
 # Visualization of data faceted by HRV and grouped by ischemia
@@ -474,13 +475,7 @@ tmp <-
   theme_minimal()
 ```
 
-```{r}
-df <- inner_join(hrv_blocks, angio_scores, by = "patid")
-df$cad <- ifelse(df$cass50 > 1, 1, 0)
-
-```
-
-### Measing association
+### Measuring association
 
 ```{r}
 df <- 
@@ -502,6 +497,9 @@ ggplot(df, aes(x = value, y = cad, color = hrv)) +
     y = "CAD"
   )
 
+
+df <- 
+
 # REgrsssions
 df <- inner_join(hrv_proc, angio_scores, by = "patid") %>% na.omit()
 df$cad <- ifelse(df$cass50 > 1, 1, 0)
@@ -509,3 +507,28 @@ df$hour <- hour(df$clock)
 
 glm(cad ~ LF*hour, family = "binomial", data = df) %>% summary()
 ```
+
+
+### DYX exploration
+
+```{r}
+df <- inner_join(angio_scores, hrv_blocks, by = "patid")
+df$cad <- ifelse(df$cass70 >= 1, 1, 0)
+
+t.test(DYX ~ cad, data = subset(df, hour == 12))
+
+ggplot(na.omit(df), aes(x = hour, y = DYX, group = factor(cad), colour = factor(cad))) +
+  geom_smooth()
+
+ggplot(na.omit(df), aes(x = hour, y = ApEn, group = factor(cad), colour = factor(cad))) +
+  geom_smooth()
+
+ggplot(na.omit(df), aes(x = hour, y = AC, group = factor(cad), colour = factor(cad))) +
+  geom_smooth()
+
+ggplot(na.omit(df), aes(x = hour, y = DC, group = factor(cad), colour = factor(cad))) +
+  geom_smooth()
+
+glm(cad ~ DYX*hour, family = "binomial", data = df) %>% summary()
+```
+

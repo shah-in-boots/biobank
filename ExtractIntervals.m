@@ -60,12 +60,13 @@ parfor i = 1:numsub
 
   % Extract RR intervals for each patien
   fprintf('Making RR intervals for patient %s.\n', name);
-  [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ConvertRawDataToRRIntervals(ecg, HRVparams, name);
+  [t_RR, rr, jqrs_ann, SQIjw, StartIdxSQIwindows_jw] = ... 
+      ConvertRawDataToRRIntervals(ecg, HRVparams, name);
 
   % Save the RR table
   m = [t_RR(:), rr(:)];
   T = array2table(m, 'VariableNames',{'time','rr'});
-  writetable(m, [proc_folder filesep name filesep name '_rr.csv']);
+  writetable(T, [proc_folder filesep name filesep name '_rr.csv']);
 
   % Stop time
   toc
