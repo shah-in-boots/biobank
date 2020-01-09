@@ -10,6 +10,10 @@ patid <- list.dirs(path = proc_folder, recursive = FALSE, full.names = FALSE)
 # Need the timestamps of all the data
 hrv_params <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'), col_names = TRUE) %>% na.omit()
 
+# Only process HRV on patients that have it completed
+logfile <- read_xlsx(file.path(raw_folder, "patient_log.xlsx"), col_names = TRUE)
+patid <- patid[which(patid %in% logfile$ID[logfile$Status == "processed"])]
+
 # }}}
 
 ## Function to extract HRV into single data file, blocked by hour {{{ ====
@@ -58,7 +62,7 @@ for (i in seq_along(patid)) {
   
   # All the basic analysis summary data / settings should be extracted while in each folder
   removed <- read_csv(Sys.glob(file.path(proc_folder, name , "Removed*")), col_names = TRUE)
-  names(removed)[1] <- 'patid'
+  names(removed)[1] <- "patid"
   hrvparams <- read_csv(Sys.glob(file.path(proc_folder, name, "Parameters*.csv")), col_names = TRUE)
   hrvparams$patid <- name
   hrvparams %<>% pivot_wider(., names_from = Tab1, values_from = Tab2)

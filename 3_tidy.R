@@ -269,3 +269,4 @@ df <- subset(df, select = c(patid, index, clock, hour))
 hrv_first_hour <- inner_join(hrv_blocks, df, by = c("patid", "hour"))
 
 # }}}
+
