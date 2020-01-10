@@ -3,8 +3,8 @@ title: "Depression, HRV, and CAD Pilot Study"
 subtitle: "METRIC Research-in-Progress"
 author: 
 - Anish Shah, MD^[Department of Medicine, School of Medicine, Emory University]
-- Amit Shah, MD, MSCR^[Divison of Cardiology, Department of Medicine, Emory University]
-- Alvaro Alonso, MD, PhD^[Department of Epidemiology, Rollins School of Public Health, Emory University]
+- Amit Shah, MD/MSCR^[Divison of Cardiology, Department of Medicine, Emory University]
+- Alvaro Alonso, MD/PhD^[Department of Epidemiology, Rollins School of Public Health, Emory University]
 date: "January 15, 2020"
 fontsize: 10pt
 output: 
@@ -70,21 +70,10 @@ print(omega_time - alpha_time)
 ```
 
 # Overview
+### Aims
 
-### Disclosures and Funding
-
-- Emory University
-- Emory Clinical Cardiovascular Research Institute
-- Emory Program in Cardivascular Outcomes Research and Epidemiology
-- Georgia Clinical & Translational Science Alliance
-- NIH/NCATS UL1TR002378, TL1 TL1TR002382
-
-### Emory Cardiovascular Biobank
-
-- Ongoing prospective cohort of patients undergoing cardiac catherization
-- Includes clinical history and biomarkers
-- Includes psychological questionnaires (including depression by PHQ9)
-- Over 7000 patients enrolled overall
+1. Quantify how depression affects ANS function
+2. Examine how ANS dysfunction can predict obstructive (versus microvascular) CAD
 
 ### Background {.allowframebreaks}
 
@@ -92,12 +81,15 @@ This is a pilot study examining the relationship between depression and CAD. We 
 
 ![Poincare plot](figures/ijc-figure-1.jpg)
 
-### Aims
+### Emory Cardiovascular Biobank
 
-1. Quantify how depression affects ANS function
-2. Examine how HRV can predict obstructive (versus microvascular) CAD
+- Ongoing prospective cohort of patients undergoing cardiac catherization
+- Includes clinical history and biomarkers
+- Includes psychological questionnaires (including depression by PHQ9)
+- Over 7000 patients enrolled overall
+- Have enrolled 36 patients thus far
 
-# Descriptive analysis
+# Description
 
 ## Population
 
@@ -113,7 +105,7 @@ df$setting <- df_txt$setting
 # Table 1
 compareGroups(~ gend + race + blbmi + setting + age, data = df) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "Depression")
+  export2md(., format = "latex", size = 8, caption = "Population")
 ```
 
 ## Depression
@@ -174,6 +166,7 @@ compareGroups(data = df, ~ cass50 + cass70 + gensini + stenosis) %>%
 - HRV is generated through the Emory HRV Toolbox 
 - Frequency domain was log-transformed
 - HRV was blocked into averaged 1-hour segments for analysis
+- Approximately 25% of the HRV data was considered unusuable and discarded
 
 ### Quality of HRV data
 
@@ -186,26 +179,7 @@ compareGroups(data = df, ~ Duration + PercentNotAnalyzed + PercentLowQualityWind
   export2md(., format = "latex", size = 8, caption = "HRV quality")
 ```
 
-### Overview of all HRV measures {.allowframebreaks}
-
-```{r, descriptive HRV}
-df <- hrv_proc %>% na.omit()
-
-# Time domain
-compareGroups(data = df, ~ BPM + SDNN + RMSSD + PNN50) %>%
-  createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "Time Domain")
-
-# Frequency domain
-compareGroups(data = df, ~ HF + LF + VLF + ULF + TP + LFHF) %>%
-  createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "Frequency Domain")
-
-# Other measures
-compareGroups(data = df, ~ AC + DC + SampEn + ApEn) %>%
-  createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "Additional Measures")
-```
+### Overview of HRV measures {.allowframebreaks}
 
 ```{r, HRV graphs}
 df <- hrv_long
@@ -430,7 +404,7 @@ stargazer(mhf, mlf, mvlf, msampen, type = "latex", header = F,
 ### Differences in population
 
 ```{r basic stats for CAD}
-df <- inner_join(angio_scores, hrv_blocks, by = "patid")
+df <- inner_join(angio_scores, hrv_first_hour, by = "patid")
 df$cad1 <- ifelse(df$cass50 >= 1, 1, 0)
 df$cad2 <- ifelse(df$cass50 >= 2, 1, 0)
 df$cad3 <- ifelse(df$cass50 >= 3, 1, 0)
@@ -442,7 +416,7 @@ df$cad6 <- ifelse(df$cass70 >= 3, 1, 0)
 # Candidate measures = RMSSD, PNN50, AC .... ULF, LFHF, DC, SDNN
 # Cass50 = ...
 # Cass70 > 1 =  AC, DC, SampEn
-subset(df, hour == 11) %>%
+df %>%
   compareGroups(data = ., cad4 ~ LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn + DYX) %>%
   createTable(.) %>%
   export2md(., format = "latex", size = 8, caption = "HRV by Obstructive CAD")
@@ -453,11 +427,11 @@ subset(df, hour == 11) %>%
 ### Visualizing Differences in HRV by CAD
 
 ```{r HRV x CAD plot}
-df <- inner_join(hrv_proc, angio_scores[c("patid", "stenosis", "cass50")], by = "patid")
-df$cad <- ifelse(df$cass50 > 1, 1, 0)
+df <- inner_join(hrv_proc, angio_scores[c("patid", "stenosis", "cass70")], by = "patid")
+df$cad <- ifelse(df$cass70 > 1, 1, 0)
 
 df %<>%
-  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, stenosis, cad, cass50)) %>% 
+  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, stenosis, cad, cass70)) %>% 
   na.omit()
 
 month(df$clock) <- month(today())
@@ -472,7 +446,7 @@ ggplot(df, aes(x = clock, y = value, group = factor(cad), color = factor(cad))) 
   theme_minimal() +
   theme(legend.position = "none") + 
   labs(
-    title = "HRV by CASS50 (if >1 = yellow)",
+    title = "HRV by CASS70 (if >1 = yellow)",
     x = "Time (hour of day)",
     y = "HRV"
   )
@@ -543,7 +517,7 @@ tmp <-
 
 ```{r}
 df <- 
-  pivot_longer(hrv_first_hour, names_to = "hrv", values_to = "value", -c(patid, index, index, clock)) %>%
+  pivot_longer(hrv_first_hour, names_to = "hrv", values_to = "value", -c(patid, index, index, clock, hour)) %>%
   inner_join(angio_scores, ., by = "patid") %>%
   na.omit()
 df$cad <- ifelse(df$cass70 >= 1, 1, 0)
@@ -579,7 +553,6 @@ glm(cad ~ DC + gend + age, family = "binomial",  data = df) %>% summary()
 glm(cad ~ DYX + gend + age, family = "binomial",  data = df) %>% summary()
 ```
 
-
 ### DYX exploration
 
 ```{r, include = FALSE}
@@ -605,3 +578,13 @@ mdyx <- glm(cad ~ DYX*hour, family = "binomial", data = df)
 ```{r, t test}
 t.test(DYX ~ cad, data = subset(df, hour == 11))
 ```
+
+# Future Directions and Limitations
+
+- Larger sample size
+- Identify times of catherization to control for sedation
+- Consider stratifying effects of medications (e.g. beta blockers)
+- Subset of patients with first-time angina (versus known CAD)
+- Cosinor/complex time series analyses
+- Circadian / time-of-day adjustment
+- Adjustment for risk factors
