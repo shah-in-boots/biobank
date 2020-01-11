@@ -70,28 +70,52 @@ print(omega_time - alpha_time)
 ```
 
 # Overview
-### Aims
-
-1. Quantify how depression affects ANS function
-2. Examine how ANS dysfunction can predict obstructive (versus microvascular) CAD
 
 ### Background {.allowframebreaks}
 
+![DAG](figures/figure_dag.png)
+
 This is a pilot study examining the relationship between depression and CAD. We have shown using the non-linear HRV metric, Dyx, is a powerful predictor of CAD, and can also be a useful marker for Depression.
+
+
+### Hypothesis
+
+1. We hypothesize that elevated PHQ-9 scores will associate with abnormal HRV
+1. We hypothesize that A) abnormal HRV will associate with obstructive CAD (stenosis > 70%), abnormal HRV will associate with a greater number of obstructed vessels in a dose-response manner
+
+### Methods
+
+- Using the Emory Cardiovascular Biobank, we have an ongoing recruitment of a prospective cohort undergoing cardiac catherization
+- Clinical history and biomarkers are generated (including blood samples)
+- Psychological questionnaires are performed, including depression by PHQ9
+- ECG data is collected using the VivaLNK patch (6-24 hours of data per patient)
+
+### Depression scoring
+
+- Each patient is given a questionnaire, the PHQ9
+- The scores are validated and suggest severity/category of depression
+- Scores >= 10 are considered moderate to severe depression, and accepted cut-off
+
+### Cardiac catherization
+
+- Every patient presents for cardiac catherization to be enrolled
+- Are either inpatient or outpatient
+- Etiology: pre-op, heart transplant, UA, NSTEMI, STEMI, positive stress test
+- scored by angiographic severity indices - CASS and Gensini scores
+
+### Heart Rate Variability Collection
+
+- ECG data was collected using the VivaLNK patch
+- this records data for up to 72 hours
+- ECG was started the AM of LHC, and continued for several hours after event
+- HRV was generated through signal processing in Matlab (PhysioNet Cardiovascular Signal Toolbox)
+- Frequency domain was log-transformed
+- HRV was blocked into averaged 1-hour segments for analysis
+- _Dyx_ was also generated, which summarizes a Poincare plot by the ratio of the kurtoses of the y-axis and x-axis
 
 ![Poincare plot](figures/ijc-figure-1.jpg)
 
-### Emory Cardiovascular Biobank
-
-- Ongoing prospective cohort of patients undergoing cardiac catherization
-- Includes clinical history and biomarkers
-- Includes psychological questionnaires (including depression by PHQ9)
-- Over 7000 patients enrolled overall
-- Have enrolled 36 patients thus far
-
-# Description
-
-## Population
+# Results
 
 ### Demographic description
 
@@ -102,73 +126,27 @@ df$gend <- df_txt$gend
 df$race <- df_txt$race
 df$setting <- df_txt$setting
 
+# Relabel
+attr(df$gend, "label") <- "Gender"
+attr(df$blbmi, "label") <- "Body Mass Index"
+
+# Add depression and CAD
+df %<>% inner_join(., psych, by = "patid")
+df %<>% inner_join(., angio_scores, by = "patid")
+df$cad <- factor(ifelse(df$cass70 >= 1, 1, 0))
+attr(df$sad, "label") <- "PHQ > 9"
+attr(df$cad, "label") <- "CASS-70 >= 1"
+
 # Table 1
-compareGroups(~ gend + race + blbmi + setting + age, data = df) %>%
+compareGroups(~ age + gend + race + blbmi + setting + sad + cad, data = df) %>%
   createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
   export2md(., format = "latex", size = 8, caption = "Population")
 ```
 
-## Depression
-
-### Depression scoring
-
-- Each patient is given a questionnaire, the PHQ9
-- The scores are validated and suggest severity/category of depression
-- Scores >= 10 are considered moderate to severe depression, and accepted cut-off
-
-### Depression table
-
-```{r depression scoring}
-df <- inner_join(demo, psych, by = "patid")
-df$adm_reason <- df_txt$adm_reason
-df$gend <- df_txt$gend
-df$race <- df_txt$race
-df$sad %<>% factor()
-levels(df$sad) <- c("Low Depression", "High Depression")
-
-# Depression comparison
-compareGroups(data = df, sad ~ gend + race + adm_reason) %>%
-  createTable(., hide = c(gend = "Female"), show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "Depression scoring")
-```
-
-## Coronary artery disease
-
-### Cardiac catherization
-
-- Every patient presents for cardiac catherization to be enrolled
-- Are either inpatient or outpatient
-- Etiology: pre-op, heart transplant, UA, NSTEMI, STEMI, positive stress test
-- scored by angiographic severity indices - CASS and Gensini scores
-
-### CAD Severity
-
-```{r CAD overview}
-df <- inner_join(demo, angio_scores, by = "patid")
-df$adm_reason <- df_txt$adm_reason
-df$gend <- df_txt$gend
-df$race <- df_txt$race
-df$cad <- ifelse(df$cass70 >= 1, 1, 0)
-
-# CAD scoring systems
-compareGroups(data = df, ~ cass50 + cass70 + gensini + stenosis) %>%
-  createTable(., show.p.overall = FALSE) %>%
-  export2md(., format = "latex", size = 8, caption = "CAD Severity Scores")
-```
-
-## Heart rate variability
-
-### Overview of HRV
-
-- ECG data was collected using the VivaLNK patch
-- this records data for up to 72 hours
-- ECG was started the AM of LHC, and continued for several hours after event
-- HRV is generated through the Emory HRV Toolbox 
-- Frequency domain was log-transformed
-- HRV was blocked into averaged 1-hour segments for analysis
-- Approximately 25% of the HRV data was considered unusuable and discarded
-
 ### Quality of HRV data
+
+- Arrhythmia, artifact were excluded from analysis
+- Approximately 25% of the HRV data was considered unusuable and discarded
 
 ```{r}
 df <- hrv_params
@@ -179,7 +157,7 @@ compareGroups(data = df, ~ Duration + PercentNotAnalyzed + PercentLowQualityWind
   export2md(., format = "latex", size = 8, caption = "HRV quality")
 ```
 
-### Overview of HRV measures {.allowframebreaks}
+### Overview of HRV {.allowframebreaks}
 
 ```{r, HRV graphs}
 df <- hrv_long
@@ -246,85 +224,33 @@ ggplot(na.omit(df), aes(x = factor(hour), y = BPM, fill = factor(hour))) +
 
 ```
 
-# Aim 1: Relationship between Depression and ANS Dysfunction
+### HRV by Depressive Sx Burden Status
 
-### Differences in population
-        
+- First hour of recorded HRV was used (prior to catherization)
+
 ```{r basic stats for depression}
 df <- inner_join(psych[c("patid", "sad", "phq")], hrv_first_hour, by = "patid")
 
+attr(df$HF, "label") <- "Mean HF (SD)"
+attr(df$LF, "label") <- "Mean LF (SD)"
+attr(df$VLF, "label") <- "Mean VLF (SD)"
+attr(df$AC, "label") <- "Mean AC (SD)"
+attr(df$DC, "label") <- "Mean DC (SD)"
+attr(df$DYX, "label") <- "Mean DYX (SD)"
+attr(df$SampEn, "label") <- "Mean SampEn (SD)"
+attr(df$ApEn, "label") <- "Mean ApEn (SD)"
+
 # Comparison of "best" HRV measures
-compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + DYX + NN) %>%
+compareGroups(data = df, sad ~ HF + LF + VLF + AC + DC + SampEn + ApEn + DYX) %>%
   createTable(.) %>%
   export2md(., format = "latex", size = 8, caption = "HRV by Depressive Sx Burden")
 ```
 
-### Hourly differences
-
-- We expect to study the circadian differences in depression and HRV
-- awaiting more complete data sets to perform cosinor analysis
-
-```{r circadian depression and T-test}
-# Df for visualization
-df <-
-  hrv_blocks %>%
-  pivot_longer(., names_to = "hrv", values_to = "value", -c(patid, hour)) %>%
-  inner_join(psych[c("patid", "sad")], ., by = "patid") %>%
-  na.omit() %>%
-  group_by(sad, hour, hrv) %>%
-  dplyr::summarise(mean = mean(value), n = length(value), sd = sd(value), se = sd(value) / sqrt(length(value)))
-
-# Have P values for significant differences handy (not currently working)
-#overall_t <-
-#  inner_join(subset(psych, !is.na(sad)), hrv_blocks, by = "patid") %>%
-#  na.omit() %>%
-#  do(
-#    NN = t.test(NN ~ sad, data = .)$p.value,
-#    SDNN = t.test(SDNN ~ sad, data = .)$p.value,
-#    RMSSD = t.test(RMSSD ~ sad, data = .)$p.value,
-#    PNN50 = t.test(PNN50 ~ sad, data = .)$p.value,
-#    ULF = t.test(ULF ~ sad, data = .)$p.value,
-#    VLF = t.test(VLF ~ sad, data = .)$p.value,
-#    LF = t.test(LF ~ sad, data = .)$p.value,
-#    HF = t.test(HF ~ sad, data = .)$p.value,
-#    LFHF = t.test(LFHF ~ sad, data = .)$p.value,
-#    TP = t.test(TP ~ sad, data = .)$p.value,
-#    AC = t.test(AC ~ sad, data = .)$p.value,
-#    DC = t.test(DC ~ sad, data = .)$p.value,
-#    SampEn = t.test(SampEn ~ sad, data = .)$p.value,
-#    ApEn = t.test(ApEn ~ sad, data = .)$p.value,
-#  )
-#  gather(variable, value, -hour)
-#hourly_t$value <- as.numeric(hourly_t$value)
-#
-## Visualization of data faceted by HRV and grouped by ischemia
-#gCircadianSadness <-
-#  ggplot(df, aes(x = factor(hour), colour = sad)) +
-#  facet_wrap(~ hrv, scales = "free_y") +
-#  geom_point(aes(y = mean), size = 2, position = position_dodge(.3)) +
-#  scale_shape_manual(values = c(1, 16)) +
-#  geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, position = position_dodge(.3))
-#  theme(panel.border = element_rect(colour = "black", fill = NA)) +
-#  labs(
-#    title = "Hourly HRV in those with depression",
-#    x = "Time in Hours",
-#    y = "Normalized HRV [SEM]",
-#    colour = "Depression",
-#  ) +
-#  scale_color_viridis(option = "cividis", discrete = TRUE, begin = .1, end = .9) +
-#  theme_minimal() +
-#  theme(
-#    plot.caption = element_text(hjust = 0),
-#    legend.position = "bottom",
-#    legend.box = "horizontal"
-#  )
-```
-
-### Visualizing Differences in HRV by Depression
+### Visualizing Differences in HRV by Depression {.allowframebreaks}
 
 ```{r HRV x depression plot}
 df <- 
-  inner_join(hrv_proc, psych[c("patid", "sad")], by = "patid") %>%
+  inner_join(hrv_proc[c("patid", "index", "clock", "HF", "AC")], psych[c("patid", "sad")], by = "patid") %>%
   pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, sad)) %>%
   na.omit() 
 
@@ -340,17 +266,15 @@ ggplot(df, aes(x = clock, y = value, group = factor(sad), color = factor(sad))) 
   theme_minimal() +
   theme(legend.position = "none") + 
   labs(
-    title = "HRV by Depression (sad = yellow)",
+    title = "HRV by Depression (PHQ > 9 = yellow)",
     x = "Time (hour of day)",
     y = "HRV"
   )
 ```
 
-### Measures of association {.allowframebreaks}
-
 ```{r}
 df <- 
-  pivot_longer(hrv_first_hour, names_to = "hrv", values_to = "value", -c(patid, hour, index, clock)) %>%
+  pivot_longer(hrv_first_hour[c("patid", "index", "hour", "clock", "HF", "AC")], names_to = "hrv", values_to = "value", -c(patid, hour, index, clock)) %>%
   inner_join(psych, ., by = "patid")
 
 # Visualize "first hour" data
@@ -418,7 +342,7 @@ df$cad6 <- ifelse(df$cass70 >= 3, 1, 0)
 # Cass70 > 1 =  AC, DC, SampEn
 df %>%
   compareGroups(data = ., cad4 ~ LFHF + NN + SDNN + RMSSD + PNN50 + AC + DC + SampEn + ApEn + DYX) %>%
-  createTable(.) %>%
+  createTable(.) #%>%
   export2md(., format = "latex", size = 8, caption = "HRV by Obstructive CAD")
 
 # At 10 AM... >70% CAD = HF, TP, SDNN, RMSSD, PNN50, AC, DC, ApEn
@@ -462,7 +386,7 @@ ggplot(df, aes(x = clock, y = value, group = factor(cad), color = factor(cad))) 
 ```{r, circadian CAD, include = FALSE}
 # Df for visualization
 tmp <- angio_scores
-tmp$cad <- ifelse(tmp$cass50 > 1, 1, 0)
+tmp$cad <- ifelse(tmp$cass70 > 1, 1, 0)
 
 df <- 
   hrv_blocks %>%
