@@ -53,6 +53,7 @@ read_hrv <- function(name) {
 rm(df_hrv)
 rm(df_param)
 
+
 # Loop definition
 for (i in seq_along(patid)) {
   
