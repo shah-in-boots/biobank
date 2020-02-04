@@ -22,6 +22,8 @@ library(knitr)
 This second chunk is to read in the data.
 
 ```{r, data intake}
+# Object "df_raw" is on the left
+# read_csv is from the tidyverse packages, it will read in comma separated files
 df_raw <- read_csv("cog.csv", col_names = TRUE, progress = show_progress())
 
 head(df_raw)
@@ -34,4 +36,18 @@ One thing we will have to do is come up with a score breakdown for the MOCA.
 - are there subsections of hte MOCA that each should be scored?
 - Are there total score groupings or categories?
 - Can you score the MOCA if its incomplete?
+
+```{r, show how to add a column}
+# OUr data set
+df <- df_raw
+
+# First we need to subset/look at the data
+
+# This is to select just a single column
+subset(df, select = Total)
+
+# HOwever, how do we find which patients gave NA values
+subset(df, select = c(UniqueID, Total))
+
+```
 
