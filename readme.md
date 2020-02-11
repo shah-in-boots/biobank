@@ -18,6 +18,13 @@ This serves as a description of the necessary steps that any Biobank staff membe
 
 The general steps are straightforward. The patch is attached to patient at left mid-axillary line at the level of the heart. The blue-tooth enabled phone syncs to the VivaLNK, and sample collection begins. At end of study, the phone application is use to stop sample collection. The data is extracted from the device, and stored. The phone and VivaLNK are stored.
 
+## VivaLNK SDK
+
+For Android, install the SDK through the shared box folder. For Apple/iOS, Tony Ma shared a TestFlight public link for using it.
+
+https://testflight.apple.com/join/HdIrxxu2
+
+
 ## VivaLNK Device Care
 
 The patch itself is washable, and can be easily cleaned with simple sanitizer. The device is reusable. The adhesives are low-cost, and single-use. The device comes with its own charger. It has the battery life of ~72 hours, and can charge to full within ~3 hours.

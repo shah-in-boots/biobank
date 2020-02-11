@@ -29,7 +29,6 @@ psych <- df
 
 # }}}
 
-
 ## Medical history {{{ ====
 
 # need to reconcile the two clinical and chart histories

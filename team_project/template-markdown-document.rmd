@@ -15,6 +15,7 @@ Basic set up for the upcoming project. This first chunk is for libraries.
 library(tidyverse)
 library(rmarkdown)
 library(knitr)
+library(magrittr)
 ```
 
 # Data Intake
@@ -31,6 +32,36 @@ head(df_raw)
 
 # Data Tidying
 
+## Covariates
+
+Here, we will identify which covariates we want to use for our modeling. 
+
+```{r}
+# What covariates do we need?
+
+# Age
+# Race
+# Sex
+# BMI
+# Smoking
+# Alcohol
+# Exercise
+# Sleep
+# Educational level
+# Chest pain / angina
+# Medications (Aspirin, clopidogrel, statins, beta blockers, other cardiac meds)
+# Stroke/CVA
+# CABG
+# H/o myocardial infarction
+# H/o PAD
+# Diabetes, A1c, random blood sugar
+# Hypertension
+# HLD
+# Depression / PHQ9
+```
+
+
+## MOCA scores
 One thing we will have to do is come up with a score breakdown for the MOCA.
 
 - are there subsections of hte MOCA that each should be scored?
@@ -46,8 +77,30 @@ df <- df_raw
 # This is to select just a single column
 subset(df, select = Total)
 
-# HOwever, how do we find which patients gave NA values
+# However, how do we find which patients gave NA values
 subset(df, select = c(UniqueID, Total))
 
+# Now we can pipe that subset into our command to remove NAs
+subset(df, select = c(UniqueID, Total)) %>%
+	na.omit()
+
+# We can finally assign it to a variable named tmp
+tmp <- subset(df, select = c(UniqueID, Total)) %>%
+	na.omit()
+
+# Lets add that new column for score category
+# Score categories are >26, 18 to 25 is mild, 10 to 17 is moderate, <10 is severe
+tmp$category <- NA
+tmp$category[tmp$Total > 25] <- "Normal"
+tmp$category[tmp$Total >= 18 & tmp$Total <= 25] <- "Mild"
+tmp$category[tmp$Total >= 10 & tmp$Total <= 17] <- "Moderate"
+tmp$category[tmp$Total < 10] <- "Severe"
+
+### How do we save/merge this data back in?
+nrow(tmp) # This tells us there are only 67 patients
+nrow(df) # This tells us original data is 87 patients long
+
+# We can merge this back in using a left join
+moca <- full_join(df, tmp[,c("UniqueID", "category")], by = "UniqueID")
 ```
 
