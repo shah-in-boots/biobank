@@ -6,6 +6,13 @@ date: January 21, 2020
 output: html_document
 ---
 
+# Introduction
+
+What is our research question(s)? What are the important concepts?
+
+- Does our cognitive status depend on the interaction between diabetes and coronary disease?
+- Do coronary disease and peripheral vascular disease have teh same effects on cognitive function?
+
 # Setup
 
 Basic set up for the upcoming project. This first chunk is for libraries.
@@ -20,15 +27,31 @@ library(magrittr)
 
 # Data Intake
 
-This second chunk is to read in the data.
-
+## Cognitive testing data
 ```{r, data intake}
 # Object "df_raw" is on the left
 # read_csv is from the tidyverse packages, it will read in comma separated files
-df_raw <- read_csv("cog.csv", col_names = TRUE, progress = show_progress())
+df_cog <- read_csv("cog.csv", col_names = TRUE, progress = show_progress())
 
-head(df_raw)
+head(df_cog)
 ```
+
+## Coronary artery disease data
+
+Still need to generate this REDCap daerate this REDCap data.
+
+## Peripheral vascular disease data
+
+Still waiting on this from collaborators.
+
+## Covariates
+
+```{r}
+# Data (modded by Brian externally)
+df_covar <- read_csv("RawCovariates.csv")
+
+```
+
 
 # Data Tidying
 
@@ -60,8 +83,8 @@ Here, we will identify which covariates we want to use for our modeling.
 # Depression / PHQ9
 ```
 
-
 ## MOCA scores
+
 One thing we will have to do is come up with a score breakdown for the MOCA.
 
 - are there subsections of hte MOCA that each should be scored?
@@ -70,7 +93,7 @@ One thing we will have to do is come up with a score breakdown for the MOCA.
 
 ```{r, show how to add a column}
 # OUr data set
-df <- df_raw
+df <- df_cog
 
 # First we need to subset/look at the data
 

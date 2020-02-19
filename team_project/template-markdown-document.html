@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Biobank Team" />
@@ -270,7 +270,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -332,6 +331,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -343,18 +343,6 @@ summary {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -383,21 +371,38 @@ $(document).ready(function () {
 </div>
 
 
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>What is our research question(s)? What are the important concepts?</p>
+<ul>
+<li>Does our cognitive status depend on the interaction between diabetes and coronary disease?</li>
+<li>Do coronary disease and peripheral vascular disease have teh same effects on cognitive function?</li>
+</ul>
+</div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
 <p>Basic set up for the upcoming project. This first chunk is for libraries.</p>
 <pre class="r"><code># Sources the file, in the same folder, to ru the command in that file
 library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages --------------------------- tidyverse 1.2.1 --</code></pre>
-<pre><code>## v ggplot2 3.1.1     v purrr   0.3.2
-## v tibble  2.1.1     v dplyr   0.8.4
+<pre><code>## -- Attaching packages -------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.2.1     v purrr   0.3.3
+## v tibble  2.1.3     v dplyr   0.8.4
 ## v tidyr   1.0.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.4.0</code></pre>
-<pre><code>## -- Conflicts ------------------------------ tidyverse_conflicts() --
+<pre><code>## -- Conflicts ----------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(rmarkdown)
-library(knitr)</code></pre>
+library(knitr)
+library(magrittr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
 </div>
 <div id="data-intake" class="section level1">
 <h1>Data Intake</h1>
@@ -405,8 +410,7 @@ library(knitr)</code></pre>
 <pre class="r"><code># Object &quot;df_raw&quot; is on the left
 # read_csv is from the tidyverse packages, it will read in comma separated files
 df_raw &lt;- read_csv(&quot;cog.csv&quot;, col_names = TRUE, progress = show_progress())</code></pre>
-<pre><code>## Warning: Duplicated column names deduplicated: &#39;Complete?&#39; =&gt; &#39;Complete?
-## _1&#39; [24]</code></pre>
+<pre><code>## Warning: Duplicated column names deduplicated: &#39;Complete?&#39; =&gt; &#39;Complete?_1&#39; [24]</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   .default = col_double(),
@@ -427,33 +431,134 @@ df_raw &lt;- read_csv(&quot;cog.csv&quot;, col_names = TRUE, progress = show_pro
 ##  87 1. PART A TEST - TIME TO COMPLETE valid date  45:36 &#39;cog.csv&#39;</code></pre>
 <pre class="r"><code>head(df_raw)</code></pre>
 <pre><code>## # A tibble: 6 x 27
-##   UniqueID `Event Name` `Data Access Gr~ GeneID `1. Visuospatia~
-##      &lt;dbl&gt; &lt;chr&gt;        &lt;lgl&gt;            &lt;chr&gt;             &lt;dbl&gt;
-## 1     1831 Enrollment ~ NA               ECN00~               NA
-## 2     1831 Enrollment ~ NA               EUH03~               NA
-## 3     1831 Enrollment ~ NA               EUH06~                4
-## 4     2903 Enrollment ~ NA               EUH02~               NA
-## 5     2903 Enrollment ~ NA               EUH06~                5
-## 6     3821 Enrollment ~ NA               EUH03~               NA
-## # ... with 22 more variables: `1a. Trail` &lt;dbl&gt;, `1b. Copy cube` &lt;dbl&gt;,
-## #   `1c. Clock` &lt;dbl&gt;, `2. Naming` &lt;dbl&gt;, `4a. Read list of digits` &lt;dbl&gt;,
-## #   `4b. Read list of letters` &lt;dbl&gt;, `4c. Serial 7 subtraction Starting
-## #   at 100` &lt;dbl&gt;, `5a. Repeat (Language)` &lt;dbl&gt;, `5b. Fluency
-## #   (Language)` &lt;dbl&gt;, `6. Abstraction` &lt;dbl&gt;, `7. Delayed Recall` &lt;dbl&gt;,
-## #   `8. Orientation` &lt;dbl&gt;, Total &lt;dbl&gt;, `Complete?` &lt;chr&gt;, `1. PART A
-## #   TEST - TIME TO COMPLETE` &lt;time&gt;, `2. PART A TEST - Number of
-## #   erros` &lt;dbl&gt;, `1. PART B TEST - TIME TO COMPLETE` &lt;time&gt;, `2. PART B
-## #   TEST - Number of erros` &lt;dbl&gt;, `Complete?_1` &lt;chr&gt;, Gender &lt;chr&gt;,
-## #   Race &lt;chr&gt;, `History of Diabetes Mellitus` &lt;chr&gt;</code></pre>
+##   UniqueID `Event Name` `Data Access Gr~ GeneID `1. Visuospatia~ `1a. Trail`
+##      &lt;dbl&gt; &lt;chr&gt;        &lt;lgl&gt;            &lt;chr&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+## 1     1831 Enrollment ~ NA               ECN00~               NA          NA
+## 2     1831 Enrollment ~ NA               EUH03~               NA          NA
+## 3     1831 Enrollment ~ NA               EUH06~                4          NA
+## 4     2903 Enrollment ~ NA               EUH02~               NA          NA
+## 5     2903 Enrollment ~ NA               EUH06~                5           0
+## 6     3821 Enrollment ~ NA               EUH03~               NA          NA
+## # ... with 21 more variables: `1b. Copy cube` &lt;dbl&gt;, `1c. Clock` &lt;dbl&gt;, `2.
+## #   Naming` &lt;dbl&gt;, `4a. Read list of digits` &lt;dbl&gt;, `4b. Read list of
+## #   letters` &lt;dbl&gt;, `4c. Serial 7 subtraction Starting at 100` &lt;dbl&gt;, `5a.
+## #   Repeat (Language)` &lt;dbl&gt;, `5b. Fluency (Language)` &lt;dbl&gt;, `6.
+## #   Abstraction` &lt;dbl&gt;, `7. Delayed Recall` &lt;dbl&gt;, `8. Orientation` &lt;dbl&gt;,
+## #   Total &lt;dbl&gt;, `Complete?` &lt;chr&gt;, `1. PART A TEST - TIME TO COMPLETE` &lt;time&gt;,
+## #   `2. PART A TEST - Number of erros` &lt;dbl&gt;, `1. PART B TEST - TIME TO
+## #   COMPLETE` &lt;time&gt;, `2. PART B TEST - Number of erros` &lt;dbl&gt;,
+## #   `Complete?_1` &lt;chr&gt;, Gender &lt;chr&gt;, Race &lt;chr&gt;, `History of Diabetes
+## #   Mellitus` &lt;chr&gt;</code></pre>
 </div>
 <div id="data-tidying" class="section level1">
 <h1>Data Tidying</h1>
+<div id="covariates" class="section level2">
+<h2>Covariates</h2>
+<p>Here, we will identify which covariates we want to use for our modeling.</p>
+<pre class="r"><code># What covariates do we need?
+
+# Age
+# Race
+# Sex
+# BMI
+# Smoking
+# Alcohol
+# Exercise
+# Sleep
+# Educational level
+# Chest pain / angina
+# Medications (Aspirin, clopidogrel, statins, beta blockers, other cardiac meds)
+# Stroke/CVA
+# CABG
+# H/o myocardial infarction
+# H/o PAD
+# Diabetes, A1c, random blood sugar
+# Hypertension
+# HLD
+# Depression / PHQ9</code></pre>
+</div>
+<div id="moca-scores" class="section level2">
+<h2>MOCA scores</h2>
 <p>One thing we will have to do is come up with a score breakdown for the MOCA.</p>
 <ul>
 <li>are there subsections of hte MOCA that each should be scored?</li>
 <li>Are there total score groupings or categories?</li>
 <li>Can you score the MOCA if its incomplete?</li>
 </ul>
+<pre class="r"><code># OUr data set
+df &lt;- df_raw
+
+# First we need to subset/look at the data
+
+# This is to select just a single column
+subset(df, select = Total)</code></pre>
+<pre><code>## # A tibble: 87 x 1
+##    Total
+##    &lt;dbl&gt;
+##  1    NA
+##  2    NA
+##  3    26
+##  4    NA
+##  5    26
+##  6    NA
+##  7    NA
+##  8    NA
+##  9    25
+## 10    NA
+## # ... with 77 more rows</code></pre>
+<pre class="r"><code># However, how do we find which patients gave NA values
+subset(df, select = c(UniqueID, Total))</code></pre>
+<pre><code>## # A tibble: 87 x 2
+##    UniqueID Total
+##       &lt;dbl&gt; &lt;dbl&gt;
+##  1     1831    NA
+##  2     1831    NA
+##  3     1831    26
+##  4     2903    NA
+##  5     2903    26
+##  6     3821    NA
+##  7     3821    NA
+##  8     3821    NA
+##  9     3821    25
+## 10     4412    NA
+## # ... with 77 more rows</code></pre>
+<pre class="r"><code># Now we can pipe that subset into our command to remove NAs
+subset(df, select = c(UniqueID, Total)) %&gt;%
+    na.omit()</code></pre>
+<pre><code>## # A tibble: 67 x 2
+##    UniqueID Total
+##       &lt;dbl&gt; &lt;dbl&gt;
+##  1     1831    26
+##  2     2903    26
+##  3     3821    25
+##  4     4412    21
+##  5     5040    27
+##  6     5206     7
+##  7     6115    26
+##  8     6529    24
+##  9     6611    29
+## 10     6631    29
+## # ... with 57 more rows</code></pre>
+<pre class="r"><code># We can finally assign it to a variable named tmp
+tmp &lt;- subset(df, select = c(UniqueID, Total)) %&gt;%
+    na.omit()
+
+# Lets add that new column for score category
+# Score categories are &gt;26, 18 to 25 is mild, 10 to 17 is moderate, &lt;10 is severe
+tmp$category &lt;- NA
+tmp$category[tmp$Total &gt; 25] &lt;- &quot;Normal&quot;
+tmp$category[tmp$Total &gt;= 18 &amp; tmp$Total &lt;= 25] &lt;- &quot;Mild&quot;
+tmp$category[tmp$Total &gt;= 10 &amp; tmp$Total &lt;= 17] &lt;- &quot;Moderate&quot;
+tmp$category[tmp$Total &lt; 10] &lt;- &quot;Severe&quot;
+
+### How do we save/merge this data back in?
+nrow(tmp) # This tells us there are only 67 patients</code></pre>
+<pre><code>## [1] 67</code></pre>
+<pre class="r"><code>nrow(df) # This tells us original data is 87 patients long</code></pre>
+<pre><code>## [1] 87</code></pre>
+<pre class="r"><code># We can merge this back in using a left join
+moca &lt;- full_join(df, tmp[,c(&quot;UniqueID&quot;, &quot;category&quot;)], by = &quot;UniqueID&quot;)</code></pre>
+</div>
 </div>
 
 
@@ -473,6 +578,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
