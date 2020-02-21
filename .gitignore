@@ -26,3 +26,5 @@ packrat/src/
 *.sqijs
 *.jqrs
 *.hea
+*.csv
+
