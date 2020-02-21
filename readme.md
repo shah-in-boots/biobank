@@ -58,6 +58,17 @@ The VivaLNK, for data extraction, requires a blue-tooth device for extraction. T
 1. The time stamps include when patch was activated/turned-on, time of LHC, time of stent deployment, time of balloon angioplasty. If there are other concerns, you may note them here.
 1. After the file has been uploaded, go to the phone and delete the text file (to not mix with the next patient's recording). Clear the flash data on the patch through the app interface.
 
+# Folder organization
+
+- __HeartTrends__: RR intervals to be given to HeartTrends, and DYX result files received from HT algorithm.
+- __archive__: Old project code or files that may need to be referenced (cannot guarantee path structures).
+- __code__: Code files in both R and Matlab.
+- __datasets__: Biobank datasets that contain population information, including catherization and clinical history. Exported from REDCap.
+- __raw_data__: VivaLNK ECG data log files that have not been processed. Patient overview is also present in XLS file.
+- __proc_data__: Matlab converted to HRV files for each patient
+- __reference__: Data dictionaries and other reference files. May include literature if needed.
+- __team_project__: Biobank study team research project, mainly a lesson in learning how to use R and RStudio. Template files are kept there for their education.
+
 # Miscellaneous
 
 ## Contact Information
