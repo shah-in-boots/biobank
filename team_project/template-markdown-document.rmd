@@ -40,9 +40,18 @@ head(df_cog)
 
 Still need to generate this REDCap daerate this REDCap data.
 
+```{r}
+# Pull in the source file called "cath-data.R" and use it to get our angiogram scores
+source("cath-data.R")
+
+# This generates the data frame angioscores
+head(angio_scores)
+```
+
+
 ## Peripheral vascular disease data
 
-Still waiting on this from collaborators.
+Dr. Hajjar is the owner of the PAD data set. That data set includes MOCA scores. How do we measure PVD? These are not Biobank patients.
 
 ## Covariates
 
