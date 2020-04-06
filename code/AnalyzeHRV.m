@@ -12,10 +12,10 @@ clear; clc; close all;
 addpath(genpath(pwd));
 
 % Folder holding data
-raw_folder = [pwd filesep 'raw_data'];
+raw_folder = [pwd filesep 'data' filesep 'raw_data'];
 
 % Target folder for patient data
-proc_folder = [pwd filesep 'proc_data'];
+proc_folder = [pwd filesep 'data' filesep 'proc_data'];
 
 % Identify all VivaLNK files
 files = dir(fullfile(raw_folder, '*.txt'));
@@ -24,7 +24,7 @@ files = dir(fullfile(raw_folder, '*.txt'));
 
 % Restrict to just new, unprocessed data
 log = readtable([raw_folder filesep 'patient_log.xlsx']);
-patients = log.ID(log.Status == "processed")';
+patients = log.ID(log.Status == "processed");
 numsub = length(patients);
 
 %% Parallel for loop for analysis
