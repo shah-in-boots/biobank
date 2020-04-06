@@ -12,19 +12,13 @@ packrat/src/
 # Ignore data files for HIPAA (project is private, so should be fine)
 # No files for now
 
-# Ignore temp word files
+# Ignore temp or swap files
 ~\$*.docx
+*.swp
 
 # Ignore images stored?
 
 # Ignore large data files
-*.txt
-*.tex
-*.mat
-*.wqrs
-*.sqijw
-*.sqijs
-*.jqrs
-*.hea
-*.csv
+data/*
+
 
