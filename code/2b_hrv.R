@@ -3,8 +3,9 @@
 ## Read in files {{{ ====
 
 # Identify all file names by ID
-raw_folder <- file.path(getwd(), '..', 'raw_data')
-proc_folder <- file.path(getwd(), '..',  'proc_data')
+raw_folder <- file.path(dirname(getwd()), "data", "raw_data")
+proc_folder <- file.path(dirname(getwd()), "data", "proc_data")
+
 patid <- list.dirs(path = proc_folder, recursive = FALSE, full.names = FALSE)
 
 # Need the timestamps of all the data
@@ -86,6 +87,8 @@ for (i in seq_along(patid)) {
 # Save the all the data
 hrv_params %<>% inner_join(., df_param)
 hrv_raw <- df_hrv
+
+# Clean
 rm(df_hrv, df_param)
 
 # }}}
@@ -93,7 +96,7 @@ rm(df_hrv, df_param)
 ## DYX data {{{ ====
 
 # Data intake
-df <- read_xlsx(file.path(getwd(), '..', 'HeartTrends', 'dyx_data.xlsx'), col_names = TRUE) %>% na.omit()
+df <- read_xlsx(file.path(getwd(), '..', 'data', 'HeartTrends', 'dyx_data.xlsx'), col_names = TRUE) %>% na.omit()
 
 # Relevant columns
 svar <- c("File Name", "Patient ID", "Final Dyx")
@@ -109,6 +112,9 @@ df$hour[df$hour > 23] <- df$hour[df$hour > 23] - 24
 
 # FInal form
 hrv_dyx <- df[c("patid", "hour", "DYX")]
+
+# Clean up
+rm(df, svar)
 
 #}}}
 
