@@ -3,7 +3,7 @@
 %% Set up environment
 
 % Clear workspace
-clear; clc; close all;
+clear; clc; 
 
 % Add necessary files to path
 % Need to be in highest biobank folder
