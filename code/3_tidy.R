@@ -6,7 +6,7 @@
 
 # }}}
 
-## Depression scores {{{ ==== 
+## Depression scores {{{ ====
 
 # Depression data set
 df <- psych
@@ -15,7 +15,7 @@ df <- psych
 # Modified it so NA rows won"t interfere c- overall score
 # If some answers are done, its unlikely that total score will be zero
 df %<>%
-  mutate(phq = select(., mdplea:mdspeak) %>% rowSums(na.rm = TRUE)) 
+  mutate(phq = rowSums(.[2:10], na.rm = TRUE))
 df$phq[df$phq == 0] <- NA
 df$phq[!is.na(df$phq)] <- df$phq[!is.na(df$phq)] - 9 # Since start at 0
 df$phq[df$phq <= 0] <- 0
@@ -91,13 +91,13 @@ df$cass70[df$rca >= 70] <- df$cass70[df$rca >= 70] + 1
 df$cass70[is.na(df$ang1results)] <- NA
 
 svar <- c(
-"patid", 
-"stenosis", 
-"lm", 
-"lad", 
-"lcx", 
+"patid",
+"stenosis",
+"lm",
+"lad",
+"lcx",
 "rca",
-"cass50", 
+"cass50",
 "cass70"
 )
 
@@ -121,10 +121,10 @@ tmp <- df[svar]
   # Gensini score is the sum of all segments
 
 # Appropriately named arteries for scoring
-df <- 
+df <-
   cath %>%
-  select(., c(patid, ang1sten1:ang1sten22)) %>%
-  mutate_all(., ~replace(., is.na(.), 0)) 
+  dplyr::select(., c(patid, ang1sten1:ang1sten22)) %>%
+  mutate_all(., ~replace(., is.na(.), 0))
 
 # Need to have overal stenoses points
 df[-1] %<>%
@@ -168,7 +168,7 @@ df$rca[df$rca == -Inf] <- 0
 df$om <- apply(X = df[c("om1", "om2", "om3")], MARGIN = 1, FUN = max, na.rm = TRUE)
 df$om[df$om == -Inf] <- 0
 
-df %<>% select(., -c(plad1, plad2, rca1, rca2, rca3, rca4, om1, om2, om3))
+df %<>% dplyr::select(., -c(plad1, plad2, rca1, rca2, rca3, rca4, om1, om2, om3))
 
 # Multiple the scores!
 df %<>% within(., {
@@ -226,11 +226,11 @@ df$hour <- hour(df$clock)
 
 # The data should also be >80% available for each hour block
 hrv_quality <-
-  df %>% 
+  df %>%
   group_by(patid, hour) %>%
   dplyr::summarise(duration = length(index)*5/3600,
                    missing = sum(is.na(NN))/length(NN))
-  
+
 # Hourly data
 hrv_blocks <- df %>%
   group_by(patid, hour) %>%
@@ -256,7 +256,7 @@ df <- left_join(hrv_blocks, hrv_quality, by = c("patid", "hour"))
 hrv_qual_blocks <- subset(df, missing < 0.2)
 
 # First hour collected data
-df <- 
+df <-
   hrv_proc %>%
   na.omit() %>%
   group_by(patid) %>%

@@ -3,14 +3,14 @@
 ## Read in data {{{ ====
 
 # Read in demographic data
-df_num <- read_csv("../datasets/biobank_data_numerical.csv", col_names = TRUE,
+df_num <- read_csv("../data/biobank_data_numerical_04-06-20.csv", col_names = TRUE,
                    col_types = c(
                      uniqueid = "c",
                      geneidadm = "c",
                      mrn = "c"
                    )
 )
-df_txt <- read_csv("../datasets/biobank_data_labels.csv", col_names = TRUE)
+df_txt <- read_csv("../data/biobank_data_labels_04-06-20.csv", col_names = TRUE)
 
 # Save the labels to match later
 numVar <- names(df_num)

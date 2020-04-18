@@ -55,8 +55,9 @@ function HRVparams = InitializeHRVparams(project_name)
 %
 % Changes made to accept VivaLNK data
 % Project is sampled at 128 Hz
+% Increased threshold for capturing ectopic beats
 %
-% Edited by Anish Shah, 07/31/19
+% Edited by Anish Shah, 07/31/19 
 % contact: mrshahman@gmail.com
 %%
 
@@ -145,9 +146,9 @@ HRVparams.data_confidence_level = 1;
 HRVparams.windowlength = 300;	      % Default: 300, seconds
 HRVparams.increment = 5;             % Default: 30, seconds increment
 HRVparams.numsegs = 5;                % Default: 5, number of segments to collect with lowest HR
-HRVparams.RejectionThreshold = .20;   % Default: 0.2, amount (%) of data that can be rejected before a
+HRVparams.RejectionThreshold = .50;   % Default: 0.2, amount (%) of data that can be rejected before a
                                       % window is considered too low quality for analysis
-HRVparams.MissingDataThreshold = .15; % Default: 0.15, maximum percentage of data allowable to be missing
+HRVparams.MissingDataThreshold = .50; % Default: 0.15, maximum percentage of data allowable to be missing
                                       % from a window .15 = 15%
 %% 5. Debug Settings
 
@@ -155,7 +156,7 @@ HRVparams.rawsig = 0;           % Load raw signal if it is available for debuggi
 HRVparams.debug = 0;
 
 %% 6. SQI Analysis Settings
-HRVparams.sqi.LowQualityThreshold = 0.75; % Default: 0.9, Threshold for which SQI represents good data
+HRVparams.sqi.LowQualityThreshold = 0.70; % Default: 0.9, Threshold for which SQI represents good data
 HRVparams.sqi.windowlength = 10;         % Default: 10, seconds, length of the comparison window
 HRVparams.sqi.increment = 1;             % Default: 1, seconds
 HRVparams.sqi.TimeThreshold = 0.1;       % Default: 0.1, seconds
@@ -166,22 +167,22 @@ HRVparams.sqi.margin = 2;                % Default: 2, seconds, Margin time not 
 
 HRVparams.preprocess.figures = 0;                   % Figures on = 1, Figures off = 0
 HRVparams.preprocess.gaplimit = 2;                  % Default: 2, seconds; maximum believable gap in rr intervals
-HRVparams.preprocess.per_limit = 0.2;               % Default: 0.2, Percent limit of change from one interval to the next
+HRVparams.preprocess.per_limit = 0.5;               % Default: 0.2, Percent limit of change from one interval to the next
 HRVparams.preprocess.forward_gap = 3;	            % Default: 3, Maximum tolerable gap at beginning of timeseries in seconds
-HRVparams.preprocess.method_outliers = 'rem';       % Default: 'rem', Method of dealing with outliers
+HRVparams.preprocess.method_outliers = 'pchip'; 		% Default: 'rem', Method of dealing with outliers
                                                     % 'cub' = replace outlier points with cubic spline method
                                                     % 'rem' = remove outlier points
                                                     % 'pchip' = replace with pchip method
-HRVparams.preprocess.lowerphysiolim = 60/160;       % Default: 60/160
-HRVparams.preprocess.upperphysiolim = 60/30;        % Default: 60/30
-HRVparams.preprocess.method_unphysio = 'rem';       % Default: 'rem', Method of dealing with unphysiologically low beats
+HRVparams.preprocess.lowerphysiolim = 30/160;       % Default: 60/160
+HRVparams.preprocess.upperphysiolim = 90/30;        % Default: 60/30
+HRVparams.preprocess.method_unphysio = 'pchip';       % Default: 'rem', Method of dealing with unphysiologically low beats
                                                     % 'cub' = replace outlier points with cubic spline method
                                                     % 'rem' = remove outlier points
                                                     % 'pchip' = replace with pchip method
 
 % The following settings do not yet have any functional effect on
 % the output of preprocess.m:
-HRVparams.preprocess.threshold1 = 0.75 ;	        % Default: 0.9, Threshold for which SQI represents good data
+HRVparams.preprocess.threshold1 = 0.70 ;	        % Default: 0.9, Threshold for which SQI represents good data
 HRVparams.preprocess.minlength = 30;            % Default: 30, The minimum length of a good data segment in seconds
 
 %% 8. AF Detection Settings
@@ -197,7 +198,7 @@ HRVparams.timedomain.dataoutput = 0;     % 1 = Print results to .txt file
                                          % Anything else = outputs to return variables only
                                          % returned variables
 HRVparams.timedomain.alpha = 50   ;      % Default: 50 ,In msec
-HRVparams.timedomain.win_tol = .15;      % Default: .15, Maximum percentage of data allowable
+HRVparams.timedomain.win_tol = .50;      % Default: .15, Maximum percentage of data allowable
                                          % to be missing from a window
 
 %% 10. Frequency Domain Analysis Settings
@@ -211,7 +212,7 @@ HF = [0.15 0.4];                    % Requires at least 7 s window
 
 HRVparams.freq.limits = [ULF; VLF; LF; HF];
 HRVparams.freq.zero_mean = 1;               % Default: 1, Option for subtracting the mean from the input data
-HRVparams.freq.method = 'lomb';             % Default: 'lomb'
+HRVparams.freq.method = 'fft';             % Default: 'lomb'
                                             % Options: 'lomb', 'burg', 'fft', 'welch'
 HRVparams.freq.plot_on = 0;
 
@@ -247,7 +248,7 @@ HRVparams.prsa.on = 1;             % Default: 1, PRSA Analysis 1=On or 0=Off
 HRVparams.prsa.win_length = 30;    % Default: 30, The length of the PRSA signal
                                    % before and after the anchor points
                                    % (the resulting PRSA has length 2*L)
-HRVparams.prsa.thresh_per = 20;    % Default: 20%, Percent difference that one beat can
+HRVparams.prsa.thresh_per = 50;    % Default: 20%, Percent difference that one beat can
                                    % differ from the next in the prsa code
 HRVparams.prsa.plot_results = 0;   % Default: 0
 HRVparams.prsa.scale = 2;          % Default: 2, scale parameter for wavelet analysis (to compute AC and DC)
@@ -257,8 +258,8 @@ HRVparams.prsa.min_anch = 20;      % Default: 20, minimum number of anchors poin
 
 % The following settings are for jqrs.m
 
-HRVparams.PeakDetect.REF_PERIOD = 0.250;   % Default: 0.25 (should be 0.15 for fetal ECG (fECG)), refractory period in sec between two R-peaks
-HRVparams.PeakDetect.THRES = .5;           % Default: 0.6, Energy threshold of the detector
+HRVparams.PeakDetect.REF_PERIOD = 0.150;   % Default: 0.25 (should be 0.15 for fetal ECG (fECG)), refractory period in sec between two R-peaks
+HRVparams.PeakDetect.THRES = .4;           % Default: 0.6, Energy threshold of the detector
 HRVparams.PeakDetect.fid_vec = [];         % Default: [], If some subsegments should not be used for finding the optimal
                                            % threshold of the P&T then input the indices of the corresponding points here
 HRVparams.PeakDetect.SIGN_FORCE = [];      % Default: [], Force sign of peaks (positive value/negative value)

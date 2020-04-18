@@ -4,6 +4,9 @@
 
 pacman::p_load(
 
+# Personal library
+autonomicR,
+
 # Development and production
 rmarkdown,
 knitr,
