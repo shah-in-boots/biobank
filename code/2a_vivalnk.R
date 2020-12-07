@@ -1,48 +1,53 @@
 #!/usr/bin/env Rscript
 
-## Identify all patient files {{{ ====
-
+# Read in data locations
 raw_folder <- file.path(dirname(getwd()), "data", "raw_data")
 proc_folder <- file.path(dirname(getwd()), "data", "proc_data")
 
-patid <- tools::file_path_sans_ext(list.files(path = raw_folder, pattern = '*.txt'))
+# Which patients?
+patid <-
+  tools::file_path_sans_ext(list.files(path = raw_folder, pattern = '*.txt'))
 
-# Create final data CSV
-if (file.exists(file.path(proc_folder, 'vivalnk_data.csv'))) {
-  unlink(file.path(proc_folder, 'vivalnk_data.csv'))
+# Is the data already processed? This is a slow file so don't want to rerun over and over again
+vivalnk <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'))
+
+# We need to make a new data summary if not available
+if (nrow(vivalnk) == length(patid)) {
+  print("Vivalnk summary uptodate.")
+} else {
+  # Create new vivalnk summary
+
+  # List
+  d <- list()
+
+  # Apply fn to each element of vector
+  for (i in seq_along(patid)) {
+    # Print out line
+    print(patid[i])
+
+    # Extraction of data
+    x <- read_patch_vivalnk(patid[i], raw_folder)
+
+    # Make data frame
+    df <- data.frame(
+      'patid' = patid[i],
+      'Start' = x[[1]],
+      'End' = x[[2]],
+      'Duration' = x[[3]]
+    )
+
+    d[[patid[i]]] <- df
+
+  }
+
+  # Write this to a file
+  df <- rbindlist(d)
+  write_csv(df, file.path(proc_folder, 'vivalnk_data.csv'))
+  rm(df, patid, x, d, vivalnk)
+
 }
-df <- data.frame('patid' = NA, 'Start' = NA, 'End' = NA, 'Duration' = NA)
-write_csv(df, file.path(proc_folder, 'vivalnk_data.csv'))
-
-# }}}
 
 
-## Extract data from VivaLNK file {{{ ====
-
-# Apply fn to each element of vector
-for(i in seq_along(patid)) {
-
-  # Print out line
-  print(patid[i])
-
-  # Extraction of data
-  x <- read_vivalnk_patch(patid[i], raw_folder)
-
-  # Make data frame
-  df <- data.frame(
-    'patid' = patid[i],
-    'Start' = x[[1]],
-    'End' = x[[2]],
-    'Duration' = x[[3]]
-  )
-
-  # Write this to a file, appending as we go
-  write_csv(df, file.path(proc_folder, 'vivalnk_data.csv'), append = TRUE)
-}
-
-rm(df, patid, x)
-
-# }}}
 
 ## Clean up erroneous files {{{ ====
 

@@ -1,6 +1,6 @@
 ---
 title: "Depression, HRV, and CAD Pilot Study"
-subtitle: "Southeast Regional CTSA Conference"
+subtitle: "CTSA Presentation"
 author: 
 - Anish Shah, MD\textsuperscript{1}
 - Amit Shah, MD/MSCR\textsuperscript{2}

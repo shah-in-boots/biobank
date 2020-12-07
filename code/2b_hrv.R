@@ -9,42 +9,11 @@ proc_folder <- file.path(dirname(getwd()), "data", "proc_data")
 patid <- list.dirs(path = proc_folder, recursive = FALSE, full.names = FALSE)
 
 # Need the timestamps of all the data
-hrv_params <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'), col_names = TRUE) %>% na.omit()
+vivalnk <- read_csv(file.path(proc_folder, 'vivalnk_data.csv'), col_names = TRUE) %>% na.omit()
 
 # Only process HRV on patients that have it completed
 logfile <- read_xlsx(file.path(raw_folder, 'patient_log.xlsx'), col_names = TRUE)
 patid <- patid[which(patid %in% logfile$ID[logfile$Status == "processed"])]
-
-# }}}
-
-## Function to extract HRV into single data file, blocked by hour {{{ ====
-
-
-# Function to extract HRV
-read_hrv <- function(name) {
-
-  # Pick out relevant columns
-  svar <- c("patID", "t_start", "NNmean", "SDNN", "RMSSD", "pnn50", "ulf", "vlf", "lf", "hf", "lfhf", "ttlpwr", "ac", "dc", "SampEn", "ApEn")
-
-  # Read in raw file
-  df <-
-    read_csv(Sys.glob(file.path(proc_folder, name, '*allwindows*.csv')), col_names = TRUE,
-             col_types = cols(
-               patID = 'c', t_start = 'i', NNmean = 'd', SDNN = 'd', RMSSD = 'd', pnn50 = 'd',
-               ulf = 'd', vlf = 'd', lf = 'd', hf = 'd', lfhf = 'd', ttlpwr = 'd',
-               ac = 'd', dc = 'd', SampEn = 'd', ApEn = 'd'
-             )) %>%
-    `[`(svar)
-
-  # Rename it all
-  names(df) <- c("patid", "index", "NN", "SDNN", "RMSSD", "PNN50", "ULF", "VLF", "LF", "HF", "LFHF", "TP", "AC", "DC", "SampEn", "ApEn")
-
-  # Convert time index into actual time, include sequence for missing
-  df$index <- seq(from = 0, to = length(df$index)*5-1, by = 5)
-  df$clock <- seconds(df$index) + hrv_params$Start[hrv_params$patid == name]
-
-  return(df)
-}
 
 # }}}
 
@@ -53,7 +22,6 @@ read_hrv <- function(name) {
 # Empty data frame
 rm(df_hrv)
 rm(df_param)
-
 
 # Loop definition
 for (i in seq_along(patid)) {
@@ -77,7 +45,8 @@ for (i in seq_along(patid)) {
   } else {df_param <- x}
 
   # HRV should be combined into a raw dataframe
-  y <- read_hrv(name)
+  y <- proc_hrv_matlab(proc_folder, name)
+  y$clock <- hours(y$t_hour) + vivalnk$Start[vivalnk$patid == name]
 
   if(exists("df_hrv")) {
     df_hrv %<>% bind_rows(., y)
@@ -85,33 +54,35 @@ for (i in seq_along(patid)) {
 }
 
 # Save the all the data
-hrv_params %<>% inner_join(., df_param)
+hrv_params <- inner_join(vivalnk, df_param, by = "patid")
 hrv_raw <- df_hrv
+names(hrv_raw) <- c("patid", "index", "NN", "SDNN", "RMSSD", "PNN50", "ULF", "VLF", "LF", "HF", "LFHF", "TP", "AC", "DC", "SampEn", "ApEn", "missing", "clock")
+
+# Reindex HRV time points to be consistent
+hrv_raw$index %<>% '+'(.,1)
 
 # Clean
-rm(df_hrv, df_param)
+rm(df_hrv, df_param, hrvparams)
 
 # }}}
 
 ## DYX data {{{ ====
 
-# Data intake
-df <- read_xlsx(file.path(getwd(), '..', 'data', 'HeartTrends', 'dyx_data.xlsx'), col_names = TRUE) %>% na.omit()
+# Data intakee
+df <- read_xlsx(file.path(getwd(), '..', 'data', 'HeartTrends', 'dyx_data-04-20-20.xlsx'), col_names = TRUE) %>% na.omit()
 
 # Relevant columns
-svar <- c("File Name", "Patient ID", "Final Dyx")
+svar <- c("Sequence", "PatientID", "Final Dyx")
 df <- df[svar]
-names(df) <- c("idxhour", "patid", "DYX")
+names(df) <- c("index", "patid", "DYX")
+df$patid <- sub("*_rr", "", df$patid)
 
 # This data frame still has the hours misaligned, will need to reorganize
-# Also trim the name
-df <- separate(data = df, col = patid, sep = "_", into = c("patid", NA))
-df <- inner_join(df, hrv_params[c("patid", "Start")], by = "patid")
-df$hour <- df$idxhour - 1 + hour(df$Start)
-df$hour[df$hour > 23] <- df$hour[df$hour > 23] - 24
+df <- inner_join(df, vivalnk[c("patid", "Start")], by = "patid")
+df$clock <- hours(df$index-1) + df$Start
 
-# FInal form
-hrv_dyx <- df[c("patid", "hour", "DYX")]
+# Final form
+hrv_dyx <- df[c("patid", "index", "clock", "DYX")]
 
 # Clean up
 rm(df, svar)

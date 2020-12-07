@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.2.26)  27 FEB 2020 13:56
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.4.26)  27 APR 2020 21:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **CTSA_slides.tex
 (./CTSA_slides.tex
-LaTeX2e <2020-02-02> patch level 4
-L3 programming layer <2020-02-25>
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-04-06>
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/beamer/beamer.cl
 s
 Document Class: beamer 2019/09/29 v3.57 A class for typesetting presentations
@@ -36,7 +36,7 @@ Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.st
 y
-Package: iftex 2019/11/07 v1.0c TeX engine tests
+Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
 \headdp=\dimen134
 \footheight=\dimen135
@@ -86,7 +86,7 @@ eoptions.sty
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.
 sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
+\KV@toks@=\toks15
 ))
 \beamer@paperwidth=\skip48
 \beamer@paperheight=\skip49
@@ -110,7 +110,7 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layoutheight=\dimen155
 \Gm@layouthoffset=\dimen156
 \Gm@layoutvoffset=\dimen157
-\Gm@dimlist=\toks15
+\Gm@dimlist=\toks16
 ) (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.cl
 o
 File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
@@ -148,7 +148,7 @@ pgfsys.sty
 frcs.sty
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/
 pgfutil-common.tex
-\pgfutil@everybye=\toks16
+\pgfutil@everybye=\toks17
 \pgfutil@tempdima=\dimen160
 \pgfutil@tempdimb=\dimen161
 
@@ -172,12 +172,12 @@ Package: pgfsys 2020/01/08 v3.1.5b (3.1.5b)
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/
 pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks17
-\pgfkeys@temptoks=\toks18
+\pgfkeys@pathtoks=\toks18
+\pgfkeys@temptoks=\toks19
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/
 pgfkeysfiltered.code.tex
-\pgfkeys@tmptoks=\toks19
+\pgfkeys@tmptoks=\toks20
 ))
 \pgf@x=\dimen162
 \pgf@y=\dimen163
@@ -195,9 +195,9 @@ pgfkeysfiltered.code.tex
 \c@pgf@countb=\count192
 \c@pgf@countc=\count193
 \c@pgf@countd=\count194
-\t@pgf@toka=\toks20
-\t@pgf@tokb=\toks21
-\t@pgf@tokc=\toks22
+\t@pgf@toka=\toks21
+\t@pgf@tokb=\toks22
+\t@pgf@tokc=\toks23
 \pgf@sys@id@count=\count195
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlaye
@@ -263,9 +263,9 @@ thparser.code.tex
 \pgfmath@dimen=\dimen172
 \pgfmath@count=\count199
 \pgfmath@box=\box55
-\pgfmath@toks=\toks23
-\pgfmath@stack@operand=\toks24
-\pgfmath@stack@operation=\toks25
+\pgfmath@toks=\toks24
+\pgfmath@stack@operand=\toks25
+\pgfmath@stack@operation=\toks26
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfma
 thfunctions.code.tex
@@ -560,7 +560,7 @@ Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfont
 s.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
-\@emptytoks=\toks26
+\@emptytoks=\toks27
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
@@ -606,7 +606,7 @@ eframe.sty
 \beamer@framebottomskip=\skip52
 \beamer@frametopskipautobreak=\skip53
 \beamer@framebottomskipautobreak=\skip54
-\beamer@envbody=\toks27
+\beamer@envbody=\toks28
 \framewidth=\dimen258
 \c@framenumber=\count292
 )
@@ -619,8 +619,8 @@ eframesize.sty
 \beamer@splitbox=\box64
 \beamer@autobreakcount=\count293
 \beamer@autobreaklastheight=\dimen259
-\beamer@frametitletoks=\toks28
-\beamer@framesubtitletoks=\toks29
+\beamer@frametitletoks=\toks29
+\beamer@framesubtitletoks=\toks30
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/beamer/beamerbas
 eframecomponents.sty
@@ -636,7 +636,7 @@ enotes.sty
 etoc.sty)
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/beamer/beamerbas
 etemplates.sty
-\beamer@sbttoks=\toks30
+\beamer@sbttoks=\toks31
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/beamer/beamerbas
 eauxtemplates.sty
@@ -659,7 +659,7 @@ elocalstructure.sty
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/enumerate.
 sty
 Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
-\@enLab=\toks31
+\@enLab=\toks32
 )
 \c@figure=\count294
 \c@table=\count295
@@ -685,7 +685,7 @@ Package: amstext 2000/06/29 v2.01 AMS text
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.s
 ty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks32
+\@emptytoks=\toks33
 \ex@=\dimen266
 ))
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.s
@@ -717,36 +717,36 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \dotsspace@=\muskip17
 \c@parentequation=\count303
 \dspbrk@lvl=\count304
-\tag@help=\toks33
+\tag@help=\toks34
 \row@=\count305
 \column@=\count306
 \maxfields@=\count307
-\andhelp@=\toks34
+\andhelp@=\toks35
 \eqnshift@=\dimen269
 \alignsep@=\dimen270
 \tagshift@=\dimen271
 \tagwidth@=\dimen272
 \totwidth@=\dimen273
 \lineht@=\dimen274
-\@envbody=\toks35
+\@envbody=\toks36
 \multlinegap=\skip58
 \multlinetaggap=\skip59
-\mathdisplay@stack=\toks36
+\mathdisplay@stack=\toks37
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amscls/amsthm.st
 y
 Package: amsthm 2017/10/31 v2.20.4
-\thm@style=\toks37
-\thm@bodyfont=\toks38
-\thm@headfont=\toks39
-\thm@notefont=\toks40
-\thm@headpunct=\toks41
+\thm@style=\toks38
+\thm@bodyfont=\toks39
+\thm@headfont=\toks40
+\thm@notefont=\toks41
+\thm@headpunct=\toks42
 \thm@preskip=\skip60
 \thm@postskip=\skip61
 \thm@headsep=\skip62
-\dth@everypar=\toks42
+\dth@everypar=\toks43
 )
 \c@theorem=\count308
 )
@@ -837,11 +837,11 @@ Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
 code-math.sty
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.s
 ty
-Package: expl3 2020-02-25 L3 programming layer (loader) 
+Package: expl3 2020-04-06 L3 programming layer (loader) 
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3back
 end-xdvipdfmx.def
-File: l3backend-xdvipdfmx.def 2020-02-23 L3 backend support: xdvipdfmx
+File: l3backend-xdvipdfmx.def 2020-03-12 L3 backend support: xdvipdfmx
 \g__graphics_track_int=\count318
 \l__pdf_internal_box=\box75
 \g__pdf_backend_object_int=\count319
@@ -856,7 +856,7 @@ TeX
 
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xpars
 e/xparse.sty
-Package: xparse 2020-02-25 L3 Experimental document command parser
+Package: xparse 2020-03-06 L3 Experimental document command parser
 \l__xparse_current_arg_int=\count321
 \g__xparse_grabber_int=\count322
 \l__xparse_m_args_int=\count323
@@ -864,7 +864,7 @@ Package: xparse 2020-02-25 L3 Experimental document command parser
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/l3key
 s2e/l3keys2e.sty
-Package: l3keys2e 2020-02-25 LaTeX2e option processing using LaTeX3 keys
+Package: l3keys2e 2020-03-06 LaTeX2e option processing using LaTeX3 keys
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspe
 c.sty
@@ -919,8 +919,8 @@ Package: pgfopts 2014/07/10 v2.1a LaTeX package options with pgfkeys
 fkeys.sty
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/
 pgfkeys.code.tex))
-\pgfopts@list@add@a@toks=\toks43
-\pgfopts@list@add@b@toks=\toks44
+\pgfopts@list@add@a@toks=\toks44
+\pgfopts@list@add@b@toks=\toks45
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/beamertheme-metr
 opolis/beamerinnerthememetropolis.sty
@@ -965,8 +965,8 @@ Package: pgffor 2020/01/08 v3.1.5b (3.1.5b)
 th.code.tex)
 \pgffor@iter=\dimen286
 \pgffor@skip=\dimen287
-\pgffor@stack=\toks45
-\pgffor@toks=\toks46
+\pgffor@stack=\toks46
+\pgffor@toks=\toks47
 ))
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendla
 yer/tikz/tikz.code.tex
@@ -1296,7 +1296,7 @@ Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
 \LT@rows=\count351
 \c@LT@tables=\count352
 \c@LT@chunks=\count353
-\LT@p@ftn=\toks47
+\LT@p@ftn=\toks48
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/booktabs/booktab
 s.sty
@@ -1356,7 +1356,7 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \col@sep=\dimen318
 \ar@mcellbox=\box85
 \extrarowheight=\dimen319
-\NC@list=\toks48
+\NC@list=\toks49
 \extratabsurround=\skip79
 \backup@length=\skip80
 \ar@cellbox=\box86
@@ -1364,9 +1364,9 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 ty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count360
-\float@exts=\toks49
+\float@exts=\toks50
 \float@box=\box87
-\@float@everytoks=\toks50
+\@float@everytoks=\toks51
 \@floatcapt=\box88
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multiro
@@ -1383,13 +1383,13 @@ sty
 \WF@size=\dimen322
 \c@WF@wrappedlines=\count362
 \WF@box=\box89
-\WF@everypar=\toks51
+\WF@everypar=\toks52
 Package: wrapfig 2003/01/31  v 3.6
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortb
 l.sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
-\everycr=\toks52
+\everycr=\toks53
 \minrowclearance=\skip83
 )
 (c:/Users/asshah4/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflsc
@@ -1428,8 +1428,8 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \abovetabulinesep=\dimen331
 \belowtabulinesep=\dimen332
 \tabustrutrule=\dimen333
-\tabu@thebody=\toks53
-\tabu@footnotes=\toks54
+\tabu@thebody=\toks54
+\tabu@footnotes=\toks55
 \tabu@box=\box91
 \tabu@arstrutbox=\box92
 \tabu@hleads=\box93
@@ -2167,12 +2167,12 @@ Package rerunfilecheck Info: File `CTSA_slides.out' has not changed.
 (rerunfilecheck)             Checksum: 0896C9E0FFF83D98630D883A58B3C851;445.
  ) 
 Here is how much of TeX's memory you used:
- 33479 strings out of 481768
- 675762 string characters out of 5934408
- 1088208 words of memory out of 5000000
- 49777 multiletter control sequences out of 15000+600000
+ 33477 strings out of 481384
+ 675984 string characters out of 5926081
+ 1089892 words of memory out of 5000000
+ 50159 multiletter control sequences out of 15000+600000
  539069 words of font info for 112 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,13n,147p,1812b,805s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,13n,150p,1812b,807s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on CTSA_slides.pdf (29 pages).

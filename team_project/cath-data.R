@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-df <- subset(df_cog, redcap_event_name == "enrollment_1_arm_1")
+df <- proc
 
 ## Angiography data {{{ ====
 
@@ -264,7 +264,8 @@ df$gensini[is.na(cath$ang1results)] <- NA
 
 # Final data set
 angio_scores <- inner_join(df[c("uniqueid", "gensini")], tmp, by = "uniqueid") %>%
-  subset(., !is.na(stenosis))
+  subset(., !is.na(stenosis)) %>%
+  unique()
 
 # }}}
 

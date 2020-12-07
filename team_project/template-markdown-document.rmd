@@ -6,14 +6,13 @@ date: January 21, 2020
 output: html_document
 ---
 
-# Introduction
+# Overview
 
-What is our research question(s)? What are the important concepts?
+## Research Question
 
-- Does our cognitive status depend on the interaction between diabetes and coronary disease?
-- Do coronary disease and peripheral vascular disease have teh same effects on cognitive function?
+- __Do coronary disease and peripheral vascular disease have teh same effects on cognitive function?__
 
-# Setup
+## R Libraries 
 
 Basic set up for the upcoming project. This first chunk is for libraries.
 
@@ -25,27 +24,63 @@ library(knitr)
 library(magrittr)
 ```
 
+## Steps needed
+
+1. Get a data set of CAD/MOCA done at the same time.
+2. Clean the data set for both CAD and MOCA scores
+3. Add in the chronic conditions and baseline variables that were __only__ taken at enrollment 1
+
+TODO:
+
+- create the covariate dataset
+- recreate the MOCA dataset
+
 # Data Intake
 
-## Cognitive testing data
-```{r, data intake}
-# Object "df_raw" is on the left
-# read_csv is from the tidyverse packages, it will read in comma separated files
-df_cog <- read_csv("cog.csv", col_names = TRUE, progress = show_progress())
 
-head(df_cog)
+## Reading In Data
+
+```{r}
+# This a direct export from REDCAP
+raw <- read_csv("../team_project/moca-cad.csv", col_names = TRUE)
+
+# Lets make a clean enrollment number
+raw$enrollment <- recode(raw$redcap_event_name, enrollment_1_arm_1 = 1, enrollment_2_arm_1 = 2, enrollment_3_arm_1 = 3, enrollment_4_arm_1 = 4)
+
+# Processing data set
+proc <- raw
+
+# Limit to just enrollments with caths
+proc <- subset(proc, enrollment %in% c(1:4))
+
+# Limit it to just enrollments with MOCA scores
+proc <- subset(proc, !is.na(mocatotal))
+
+# Key data set of barebones information
+keydata <- subset(proc, select = c(uniqueid, enrollment))
 ```
+
+# Data Cleaning
 
 ## Coronary artery disease data
 
-Still need to generate this REDCap daerate this REDCap data.
+We can read in the cath data from every visit (including repeat visits) and turn it into angiography scoring (CASS and Gensini).
 
 ```{r}
 # Pull in the source file called "cath-data.R" and use it to get our angiogram scores
-source("cath-data.R")
+# Uses the "raw" data from above
+source("../team_project/cath-data.R")
 
 # This generates the data frame angioscores
 head(angio_scores)
+```
+
+## Cognitive data only
+
+```{r}
+# Dataset trimed
+cog <- subset(proc, select = c(uniqueid, enrollment, mocatotal))
+
 ```
 
 
@@ -53,22 +88,17 @@ head(angio_scores)
 
 Dr. Hajjar is the owner of the PAD data set. That data set includes MOCA scores. How do we measure PVD? These are not Biobank patients.
 
-## Covariates
-
-```{r}
-# Data (modded by Brian externally)
-df_covar <- read_csv("RawCovariates.csv")
-
-```
-
-
-# Data Tidying
+We've emailed through Quyyumi to Hajjar to receive this data set.
 
 ## Covariates
 
-Here, we will identify which covariates we want to use for our modeling. 
-
 ```{r}
+# Add in the covariates
+baseline <- subset(raw, enrollment == 1)
+
+# Add in covariates to make a demographic/covariate dataset
+covar <- left_join(keydata, baseline[c("uniqueid", "gend", "race")], by = "uniqueid")
+
 # What covariates do we need?
 
 # Age
@@ -102,7 +132,7 @@ One thing we will have to do is come up with a score breakdown for the MOCA.
 
 ```{r, show how to add a column}
 # OUr data set
-df <- df_cog
+df <- cog
 
 # First we need to subset/look at the data
 

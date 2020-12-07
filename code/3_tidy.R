@@ -214,58 +214,29 @@ df$LF %<>% log()
 df$VLF %<>% log()
 df$TP %<>% log()
 
+# Add in dyx data
+df <- full_join(hrv_dyx[c("patid", "index", "DYX")], hrv_raw, by = c("patid", "index"))
+
+# HRV should be blocked into single hours
+df$hour <- hour(df$clock)
+
+
 # Transformed data
 hrv_proc <- df
 
 # Long data as well
 hrv_long <- hrv_proc %>%
-  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock))
-
-# HRV should be blocked into single hours
-df$hour <- hour(df$clock)
-
-# The data should also be >80% available for each hour block
-hrv_quality <-
-  df %>%
-  group_by(patid, hour) %>%
-  dplyr::summarise(duration = length(index)*5/3600,
-                   missing = sum(is.na(NN))/length(NN))
-
-# Hourly data
-hrv_blocks <- df %>%
-  group_by(patid, hour) %>%
-  dplyr::summarise(
-    NN = mean(NN, na.rm = TRUE),
-    SDNN = mean(SDNN, na.rm = TRUE),
-    RMSSD = mean(RMSSD, na.rm = TRUE),
-    PNN50 = mean(PNN50, na.rm = TRUE),
-    ULF = mean(ULF, na.rm = TRUE),
-    VLF = mean(VLF, na.rm = TRUE),
-    LF = mean(LF, na.rm = TRUE),
-    HF = mean(HF, na.rm = TRUE),
-    LFHF = mean(LFHF, na.rm = TRUE),
-    TP = mean(TP, na.rm = TRUE),
-    AC = mean(AC, na.rm = TRUE),
-    DC = mean(DC, na.rm = TRUE),
-    SampEn = mean(SampEn, na.rm = TRUE),
-   ApEn = mean(ApEn, na.rm = TRUE)
-  ) %>% left_join(., hrv_dyx, by = c("patid", "hour"))
+  pivot_longer(., names_to = "hrv", values_to = "value", values_drop_na = TRUE, -c(patid, index, clock, hour))
 
 # Can restrict it to good quality data
-df <- left_join(hrv_blocks, hrv_quality, by = c("patid", "hour"))
-hrv_qual_blocks <- subset(df, missing < 0.2)
+hrv_quality <- subset(hrv_proc, missing < 0.2)
 
 # First hour collected data
-df <-
+hrv_first <-
   hrv_proc %>%
   na.omit() %>%
   group_by(patid) %>%
   slice(which.min(clock))
-
-df$hour <- hour(df$clock)
-df <- subset(df, select = c(patid, index, clock, hour))
-
-hrv_first_hour <- inner_join(hrv_blocks, df, by = c("patid", "hour"))
 
 # }}}
 
