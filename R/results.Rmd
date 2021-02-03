@@ -1,0 +1,49 @@
+---
+title: Biobank
+subtitle: Initial Figures and Tables
+author:
+  - Anish Shah, MD\textsuperscript{1}
+institute:
+  - \textsuperscript{1}Department of Epidemiology, Rollins School of Public Health,  Emory University, Atlanta, Georgia
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+ xaringan::moon_reader:
+   self_contained: false
+   nature:
+     titleSlideClass: ["center", "middle", "inverse"]
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(
+   fig.retina = 3,
+   warning = FALSE,
+   message = FALSE,
+   echo = FALSE
+)
+
+# Xaringan needs an update for HTML issues
+options(
+   htmltools.preserve.raw = FALSE
+)
+
+
+# Load targets
+tar_load(tables)
+```
+
+class: center, middle, inverse
+# Results
+
+---
+
+```{r, tbl 1}
+tables$one
+```
+
+---
+
+```{r}
+
+```
+
+
