@@ -116,7 +116,17 @@ get_clinical_data <- function(file_biobank_values) {
 get_labels <- function(file_biobank_labels) {
 	
 	# Read in data
-	df <- read_csv(file_biobank_labels)
+	df <- 
+		read_csv(file_biobank_labels) %>%
+		mutate(reason = `Reasons for Catheterization`) %>%
+		mutate(reason = case_when(
+			str_detect(reason, "Angina") ~ "UA/NSTEMI",
+			str_detect(reason, "Non-ST") ~ "UA/NSTEMI",
+			str_detect(reason, "Positive") ~ "Stress Test",
+			str_detect(reason, "PreOp") ~ "Preoperative Risk",
+			str_detect(reason, "Peripheral") ~ "Other",
+			TRUE ~ reason
+		))
 	
 	# Return
 	df

@@ -1,9 +1,6 @@
-name|progress
-ecg|running
-ecg|built
-tables|running
-tables|built
-models|running
-models|built
-results|running
-results|built
+name|type|parent|branches|progress
+data_loc|stem|data_loc|0|skipped
+file_biobank_labels|stem|file_biobank_labels|0|started
+file_biobank_labels|stem|file_biobank_labels|0|built
+biobank_labels|stem|biobank_labels|0|started
+biobank_labels|stem|biobank_labels|0|built

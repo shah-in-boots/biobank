@@ -29,15 +29,18 @@ tidy_ecg <- function(raw_hrv, raw_dyx, raw_timings) {
 		ungroup() %>%
 		select(-index) %>%
 		labelled::set_variable_labels(
-			dyx  = "DYX",
-			sdyx = "Standardized DYX",
-			cp = "Abnormal DYX"
+			dyx  = "Dyx",
+			sdyx = "Standardized Dyx",
+			cp = "Abnormal Dyx"
 		)
 	
 	# HRV
 	hrv <-
 		raw_hrv %>%
 		left_join(., raw_timings, by = "patid") %>%
+		mutate(pnn50 = pnn50 * 100) %>%
+		mutate(across(c(ulf, vlf, lf, hf, ttlpwr), ~ log(.x))) %>%
+		mutate(across(n_nmean:ap_en, ~ scale(.x, center = TRUE, scale = TRUE))) %>%
 		mutate(timestamp = start + seconds(t_start)) %>%
 		arrange(patid, timestamp) %>%
 		mutate(hour = hour(timestamp)) %>%
@@ -59,7 +62,7 @@ tidy_ecg <- function(raw_hrv, raw_dyx, raw_timings) {
 			ac = "Acceleration Capacity",
 			dc = "Deceleration Capacity",
 			samp_en = "Sample Entropy",
-			ap_en = "Approximate Entropy"
+			ap_en = "Approximate Entropy",
 		)
 	
 	
@@ -72,6 +75,9 @@ tidy_ecg <- function(raw_hrv, raw_dyx, raw_timings) {
 	timed <- 
 		raw_hrv %>%
 		left_join(., raw_timings, by = "patid") %>%
+		mutate(pnn50 = pnn50 * 100) %>%
+		mutate(across(c(ulf, vlf, lf, hf, ttlpwr), ~ log(.x))) %>%
+		mutate(across(n_nmean:ap_en, ~ scale(.x, center = TRUE, scale = TRUE))) %>%
 		mutate(timestamp = start + seconds(t_start)) %>%
 		mutate(
 			time_start = as_date(start) + hms(time_start),
@@ -90,6 +96,7 @@ tidy_ecg <- function(raw_hrv, raw_dyx, raw_timings) {
 		pivot_longer(cols = c(pre, start, balloon, sedation, end), names_to = "context") %>%
 		filter(value == TRUE) %>%
 		group_by(patid, context) %>%
+		
 		summarise(across(n_nmean:ap_en, ~ mean(.x, na.rm = TRUE)), .groups = "keep") %>%
 		ungroup() %>%
 		labelled::set_variable_labels(
@@ -106,7 +113,7 @@ tidy_ecg <- function(raw_hrv, raw_dyx, raw_timings) {
 			ac = "Acceleration Capacity",
 			dc = "Deceleration Capacity",
 			samp_en = "Sample Entropy",
-			ap_en = "Approximate Entropy"
+			ap_en = "Approximate Entropy",
 		)
 	
 	# List
@@ -127,14 +134,16 @@ tidy_clinical <- function(raw_clinical) {
 	
 	### DEPRESSION 
 	
-	df <- raw_clinical %>% 
+	df <- 
+		raw_clinical |>
 		select(patid, starts_with("md"))
 	
 	# Create phq9
 	# Modified it so NA rows won"t interfere c- overall score
 	# If some answers are done, its unlikely that total score will be zero
-	df %<>%
-		mutate(phq = rowSums(across(starts_with("md"), na.rm = TRUE)))
+	df <-
+		df |>
+		mutate(phq = rowSums(pick(starts_with("md")), na.rm = TRUE))
 	df$phq[df$phq == 0] <- NA
 	df$phq[!is.na(df$phq)] <-
 		df$phq[!is.na(df$phq)] - 9 # Since start at 0
@@ -307,10 +316,11 @@ tidy_clinical <- function(raw_clinical) {
 	# Final data set
 	angio_scores <- inner_join(df[c("patid", "gensini")], tmp, by = "patid")
 	
-	### PUT ALL DATA TOGETHER
+	### COMBINE WITH DEMOGRAPHICS
+	
 	all <- 
 		raw_clinical %>%
-		select(c(patid, age, race, blbmi, gend, setting)) %>%
+		select(c(patid, age, race, blbmi, gend, setting, adm_reason, pci_adm)) %>%
 		left_join(., psych, by = "patid") %>%
 		left_join(., angio_scores, by = "patid") %>%
 		set_variable_labels(
@@ -319,10 +329,13 @@ tidy_clinical <- function(raw_clinical) {
 			race = "Race",
 			blbmi = "BMI (kg/m^2)",
 			gend = "Sex",
+			setting = "Clinical Setting",
+			adm_reason = "Reason for Catheterization",
 			phq = "PHQ-9 Score",
 			sad = "Depression",
 			gensini = "Gensini Score",
 			stenosis = "Stenosis",
+			pci_adm = "Revascularization",
 			cass50 = "CASS-50 Score",
 			cass70 = "CASS-70 Score"
 		)
